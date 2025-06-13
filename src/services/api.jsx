@@ -25,3 +25,29 @@ apiClient.interceptors.request.use(
     },
     (error) => Promise.reject(error)
 );
+
+export const login = async (data) => {
+    try {
+        return await apiClient.post('/auth/login', data);
+    } catch (e) {
+        return { error: true, e };
+    }
+};
+
+//User
+
+export const listUsers = async () => {
+    try {
+        return await apiClient.get(`/user/listUsers`);
+    } catch (e) {
+        return { error: true, e };
+    }
+};
+
+export const getUserById = async (uid) => {
+    try {
+        return await apiClient.get(`/users/findUser/${uid}`);
+    } catch (e) {
+        return { error: true, e };
+    }
+};
