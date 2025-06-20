@@ -7,7 +7,8 @@ import { useUser } from "../../shared/hooks";
 
 export const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const {role}= useUser();
+  const { user } = useUser(); 
+  const role = user?.role;    
 
   const handleAuthPageToggle = () => {
     setIsLogin((prev) => !prev);

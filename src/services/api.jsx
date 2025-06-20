@@ -38,7 +38,7 @@ export const login = async (emailOrUsername, password) => {
 
 export const getUser = async () => {
     try {
-        return await apiClient.get(`/users/getUser`);
+        return await apiClient.get(`/user/getUser`);
     } catch (e) {
         return { error: true, e };
     }
@@ -46,7 +46,7 @@ export const getUser = async () => {
 
 export const getUserById = async (uid) => {
     try {
-        return await apiClient.get(`/users/findUser/${uid}`);
+        return await apiClient.get(`/user/findUser/${uid}`);
     } catch (e) {
         return { error: true, e };
     }
