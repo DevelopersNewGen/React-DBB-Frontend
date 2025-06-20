@@ -1,0 +1,74 @@
+
+.navbar-appbar {
+  background-color: #f5e4e4; 
+  box-shadow: none;
+  border-bottom: 1px solid #333;
+}
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  min-width: 100vw;
+}
+
+.navbar-toolbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+}
+
+.navbar-logo {
+  height: 32px;
+  margin-right: 24px;
+}
+
+.navbar-page-button {
+  color: #cccccc;
+  border: 1px solid #444;
+  margin-right: 8px;
+  padding: 6px 16px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.navbar-page-button:hover {
+  background-color: #333;
+  color: #ffffff;
+  border-color: #555;
+}
+
+.navbar-page-button.active {
+  background-color: #a7a8ad;
+  color: #000000;
+  border: none;
+}
+
+.navbar-login-link {
+  color: #c3c4d8;
+  font-weight: 600;
+  margin-right: 16px;
+  cursor: pointer;
+}
+
+.navbar-login-link:hover {
+  text-decoration: underline;
+}
+
+.navbar-title {
+  color: #ffffff;
+}
+
+.MuiAvatar-root {
+  width: 36px;
+  height: 36px;
+}
+
+.MuiMenu-paper {
+  background-color: #2a2a2a;
+  color: #ffffff;
+}

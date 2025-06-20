@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useUser } from '../shared/hooks'; 
 import {
   AppBar,
@@ -16,9 +16,27 @@ import {
 } from '@mui/material';
 import MiscellaneousServicesIcon from '@mui/icons-material/MiscellaneousServices';
 import LogoutIcon from '@mui/icons-material/Logout';
+import PaidIcon from '@mui/icons-material/Paid';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+import GroupIcon from '@mui/icons-material/Group';
 import '../assets/navbar.css';
 
-const pagesAdmin = ['Transferir','Pagos','Cuentas','Servicios','Clientes'];
+const pagesAdmin = [
+  { name: 'Transferir', path: '/transferir', icon: <SwapHorizIcon sx={{ mr: 1 }} /> },
+  { name: 'Pagos', path: '/pagos', icon: <PaidIcon sx={{ mr: 1 }} /> },
+  { name: 'Cuentas', path: '/cuentas', icon: <AccountBalanceIcon sx={{ mr: 1 }} /> },
+  { name: 'Servicios', path: '/servicios', icon: <ReceiptLongIcon sx={{ mr: 1 }} /> },
+  { name: 'Clientes', path: '/clientes', icon: <GroupIcon sx={{ mr: 1 }} /> }
+];
+
+const pagesUser = [
+  { name: 'Transferir', path: '/transferir', icon: <SwapHorizIcon sx={{ mr: 1 }} /> },
+  { name: 'Pagos', path: '/pagos', icon: <PaidIcon sx={{ mr: 1 }} /> },
+  { name: 'Cuentas', path: '/cuentas', icon: <AccountBalanceIcon sx={{ mr: 1 }} /> },
+  { name: 'Servicios', path: '/servicios', icon: <ReceiptLongIcon sx={{ mr: 1 }} /> }
+];
 
 const settings = [
   { icon: MiscellaneousServicesIcon, text: 'Perfil' },
@@ -28,6 +46,7 @@ const settings = [
 export const ResponsiveAppBar = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, role, isLoading } = useUser();
   const isLogged = !!user;
   const img = user?.img;
@@ -50,92 +69,85 @@ export const ResponsiveAppBar = () => {
     }
     setAnchorElUser(null);
   };
-  
-  const handlePages = (page) => {
-    const routes = {
-      Transferir: '/transferir',
-      Pagos: '/pagos',
-      Cuentas: '/cuentas',
-      Servicios: '/servicios',
-      Clientes: '/clientes',
-    };
-    if (routes[page]) {
-      navigate(routes[page]);
-    }
+
+  const handlePages = (path) => {
+    navigate(path);
   };
 
   const pages =
     role === 'ADMIN_ROLE'
       ? pagesAdmin
-      : [];
+      : pagesUser;
 
-  if (isLoading) return null; // O un loader
+  if (isLoading) return null; 
 
   return (
-    <AppBar position="fixed" className="navbar-appbar">
-      <Container maxWidth="xl" className="navbar-container">
+    <AppBar
+      position="fixed"
+      className="navbar-appbar"
+      style={{ backgroundColor: '#1e1e1e', boxShadow: 'none', borderBottom: '1px solid #333' }}
+    >
+      <Container maxWidth={false} className="navbar-container">
         <Toolbar disableGutters className="navbar-toolbar">
-          <img src="vite.svg" alt="Logo" style={{ height: 40 }} className="navbar-logo" />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            className="navbar-title desktop"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none'
-            }}
-          >
-            
-          </Typography>
+          
+          <img src="/logo.png" alt="Logo" style={{ height: 56, marginRight: 24 }} className="navbar-logo" />
 
-          {isLogged ? (
-            <>
-              <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                {pages.map((page) => (
-                  <Button
-                    key={page}
-                    onClick={() => handlePages(page)}
-                    className="navbar-page-button"
-                    sx={{ my: 2, color: 'white', display: 'block' }}
-                  >
-                    {page}
-                  </Button>
-                ))}
-              </Box>
-              <Box sx={{ flexGrow: 0, ml: 'auto' }}>
-                <Tooltip title="Configuración">
-                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar src={img} />
-                  </IconButton>
-                </Tooltip>
-                <Menu
-                  sx={{ mt: '45px' }}
-                  id="menu-appbar"
-                  anchorEl={anchorElUser}
-                  anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                  keepMounted
-                  transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                  open={Boolean(anchorElUser)}
-                  onClose={() => setAnchorElUser(null)}
+          
+          {isLogged && (
+            <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
+              {pages.map((page) => (
+                <Button
+                  key={page.name}
+                  onClick={() => handlePages(page.path)}
+                  className={`navbar-page-button${location.pathname === page.path ? ' active' : ''}`}
+                  sx={{ my: 2, color: 'white', display: 'block', alignItems: 'center' }}
+                  startIcon={page.icon}
                 >
-                  {settings.map((setting) => (
-                    <MenuItem key={setting.text} onClick={() => handleCloseUserMenu(setting)}>
-                      <Typography sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <setting.icon fontSize="small" />
-                        {setting.text}
-                      </Typography>
-                    </MenuItem>
-                  ))}
-                </Menu>
-              </Box>
-            </>
+                  {page.name.toUpperCase()}
+                </Button>
+              ))}
+            </Box>
+          )}
+
+          
+          {isLogged ? (
+            <Box sx={{ display: 'flex', alignItems: 'center', ml: 'auto' }}>
+              <Typography
+                sx={{
+                  color: '#666cff',
+                  fontWeight: 600,
+                  marginRight: 2,
+                  fontFamily: 'monospace',
+                  letterSpacing: '.05rem'
+                }}
+              >
+                {user?.name}
+              </Typography>
+              <Tooltip title="Configuración">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar src={img} />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: '45px' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                keepMounted
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                open={Boolean(anchorElUser)}
+                onClose={() => setAnchorElUser(null)}
+              >
+                {settings.map((setting) => (
+                  <MenuItem key={setting.text} onClick={() => handleCloseUserMenu(setting)}>
+                    <Typography sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <setting.icon fontSize="small" />
+                      {setting.text}
+                    </Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
           ) : (
             <Box sx={{ flexGrow: 0, ml: 'auto' }}>
               <Typography
