@@ -114,7 +114,7 @@ export const ResponsiveAppBar = () => {
             <Box sx={{ display: 'flex', alignItems: 'center', ml: 'auto' }}>
               <Typography
                 sx={{
-                  color: '#666cff',
+                  color: '#fff', 
                   fontWeight: 600,
                   marginRight: 2,
                   fontFamily: 'monospace',

@@ -51,3 +51,13 @@ export const getUserById = async (uid) => {
         return { error: true, e };
     }
 };
+
+export const getUsers = async () => {
+    try {
+        return await apiClient.get('/user/');
+    } catch (e) {
+        return { error: true, e };
+    }
+};
+
+
