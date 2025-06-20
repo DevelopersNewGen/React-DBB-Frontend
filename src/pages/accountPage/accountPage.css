@@ -1,0 +1,58 @@
+/* Estilos para la vista de cuentas */
+.accounts-container {
+  width: 100%;
+  max-width: 700px;
+  margin: 40px auto;
+  font-family: 'Montserrat', Arial, sans-serif;
+}
+.account-block {
+  margin-bottom: 32px;
+}
+.account-title {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.2em;
+  margin-top: 0;
+  position: relative;
+}
+.account-title-underline {
+  display: block;
+  border-bottom: 4px solid #000;
+  width: 60%;
+  margin-top: 0.1em;
+}
+.account-table {
+  background: #111;
+  color: #fff;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+.account-table-header, .account-table-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 24px;
+}
+.account-table-header {
+  font-weight: 700;
+  border-bottom: 2px solid #fff;
+  letter-spacing: 0.05em;
+}
+.account-table-row {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+@media (max-width: 600px) {
+  .accounts-container {
+    max-width: 98vw;
+    padding: 0 2vw;
+  }
+  .account-title {
+    font-size: 1.2rem;
+  }
+  .account-table-header, .account-table-row {
+    padding: 10px 6px;
+    font-size: 0.95rem;
+  }
+}
