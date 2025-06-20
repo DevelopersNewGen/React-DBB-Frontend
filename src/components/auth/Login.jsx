@@ -1,18 +1,13 @@
 import React, { useState } from 'react';
 import { Box, Button, TextField, Typography, Paper } from '@mui/material';
-import Link from '@mui/joy/Link';
 import PropTypes from "prop-types";
-import {
-  validateEmail,
-  validateEmailMessage,
-} from "../../shared/validators/validateEmail.jsx";
 import { useLogin } from "../../shared/hooks"
 
 export const Login = ({ switchAuthHandler }) => {
   const { login, isLoading } = useLogin();
 
   const [formState, setFormState] = useState({
-    email: {
+    emailOrUsername: {
       value: "",
       isValid: false,
       showError: false,
@@ -37,11 +32,11 @@ export const Login = ({ switchAuthHandler }) => {
   const handleInputValidationOnBlur = (value, field) => {
     let isValid = false;
     switch (field) {
-      case "email":
-        isValid = validateEmail(value);
+      case "emailOrUsername":
+        isValid = value.length > 0;
         break;
       case "password":
-        isValid = true;
+        isValid = value.length > 0;
         break;
       default:
         break;
@@ -56,38 +51,40 @@ export const Login = ({ switchAuthHandler }) => {
     }));
   };
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
-    login(formState.email.value, formState.password.value);
+    if (
+      formState.emailOrUsername.isValid &&
+      formState.password.isValid &&
+      !isLoading
+    ) {
+      await login(formState.emailOrUsername.value, formState.password.value);
+    }
   };
 
   const isSubmitDisabled =
-    isLoading || !formState.email.isValid || !formState.password.isValid;
+    isLoading || !formState.emailOrUsername.isValid || !formState.password.isValid;
 
   return (
     <Box className="section-container">
-      <video className="section-bg" autoPlay loop muted>
-        <source src="https://res.cloudinary.com/daherc5uz/video/upload/v1748216098/ywxwfilf1ajkt1eiiiw7.mp4" type="video/mp4" />
-      </video>
-
       <Paper className="section-form" elevation={3} sx={{ p: 4, minWidth: 320 }}>
         <Typography className="section-title" variant="h5" mb={2} align="center">
           Iniciar Sesión
         </Typography>
-        <form >
+        <form onSubmit={handleLogin}>
           <TextField
-            label="Correo electrónico"
-            type="email"
+            label="Correo o Username"
+            type="text"
             fullWidth
             required
             margin="normal"
             variant="outlined"
             className="section-input"
-            value={formState.email.value}
-            onChange={e => handleInputValueChange(e.target.value, "email")}
+            value={formState.emailOrUsername.value}
+            onChange={e => handleInputValueChange(e.target.value, "emailOrUsername")}
             autoFocus
-            helperText={validateEmailMessage}
-            onBlur={e => handleInputValidationOnBlur(e.target.value, "email")}
+            onBlur={e => handleInputValidationOnBlur(e.target.value, "emailOrUsername")}
+            error={formState.emailOrUsername.showError}
           />
           <TextField
             label="Contraseña"
@@ -99,6 +96,7 @@ export const Login = ({ switchAuthHandler }) => {
             value={formState.password.value}
             onChange={e => handleInputValueChange(e.target.value, "password")}
             onBlur={e => handleInputValidationOnBlur(e.target.value, "password")}
+            error={formState.password.showError}
           />
           <Button
             type="submit"
@@ -107,23 +105,11 @@ export const Login = ({ switchAuthHandler }) => {
             fullWidth
             className="section-button"
             sx={{ mt: 2 }}
-            onClick={handleLogin}
             disabled={isSubmitDisabled}
           >
             Entrar
           </Button>
         </form>
-        <Link
-          color="primary"
-          disabled={false}
-          underline="always"
-          variant="plain"
-          className="section-link"
-          onClick={switchAuthHandler}
-          sx={{ display: "block", mt: 2, textAlign: "center" }}
-        >
-          Registrate
-        </Link>
       </Paper>
     </Box>
   );

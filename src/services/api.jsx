@@ -26,9 +26,9 @@ apiClient.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
-export const login = async (data) => {
+export const login = async (emailOrUsername, password) => {
     try {
-        return await apiClient.post('/auth/login', data);
+        return await apiClient.post('/auth/login', { emailOrUsername, password });
     } catch (e) {
         return { error: true, e };
     }
@@ -36,9 +36,9 @@ export const login = async (data) => {
 
 //User
 
-export const listUsers = async () => {
+export const getUser = async () => {
     try {
-        return await apiClient.get(`/user/listUsers`);
+        return await apiClient.get(`/users/getUser`);
     } catch (e) {
         return { error: true, e };
     }

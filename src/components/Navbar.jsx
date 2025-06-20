@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUserDetails } from '../shared/hooks'; // <-- Importa desde el index.js
+import { useUserDetails } from '../shared/hooks'; 
 import {
   AppBar,
   Box,
@@ -56,7 +56,7 @@ export const ResponsiveAppBar = ({ role }) => {
     <AppBar position="fixed" className="navbar-appbar">
       <Container maxWidth="xl" className="navbar-container">
         <Toolbar disableGutters className="navbar-toolbar">
-          <img src="/logo.svg" alt="Logo" style={{ height: 40 }} className="navbar-logo" />
+          <img src="vite.svg" alt="Logo" style={{ height: 40 }} className="navbar-logo" />
           <Typography
             variant="h6"
             noWrap
@@ -73,7 +73,7 @@ export const ResponsiveAppBar = ({ role }) => {
               textDecoration: 'none'
             }}
           >
-            FYPH
+            
           </Typography>
 
           {isLogged ? (

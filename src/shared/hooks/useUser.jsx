@@ -15,7 +15,21 @@ export const useUser = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await getUserById();
+      // Obtener el uid del usuario logueado
+      const userDetails = localStorage.getItem("user");
+      let uid = null;
+      if (userDetails) {
+        const parsedUser = JSON.parse(userDetails);
+        uid = parsedUser?.uid || parsedUser?._id || parsedUser?.id;
+      }
+
+      if (!uid) {
+        setError("No hay usuario logueado o falta el uid");
+        setIsLoading(false);
+        return;
+      }
+
+      const data = await getUserById(uid);
       const userData = data?.data?.user || data?.user || data;
 
       if (userData && userData.role) {
@@ -30,6 +44,7 @@ export const useUser = () => {
       setIsLoading(false);
     }
   };
+
   useEffect(() => {
     listUsers();
   }, []);
