@@ -60,4 +60,12 @@ export const getUsers = async () => {
     }
 };
 
+export const createUser = async (userData) => {
+    try {
+        return await apiClient.post('/user/createUser', userData);
+    } catch (e) {
+        return { error: true, e };
+    }
+};
+
 
