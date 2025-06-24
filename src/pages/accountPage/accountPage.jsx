@@ -4,6 +4,8 @@ import { useUserAccounts } from "../../shared/hooks/useUserAccounts";
 import AccountTable from "../../components/account/AccountTable";
 import { ResponsiveAppBar } from "../../components/Navbar.jsx";
 import { getUser } from "../../services/api";
+import CreditCard from "../../components/account/CreditCard";
+import { CreditCardList } from "../../components/account/CreditCard";
 
 export const AccountPage = () => {
   const [userId, setUserId] = useState(null);
@@ -28,31 +30,40 @@ export const AccountPage = () => {
   return (
     <>
       <ResponsiveAppBar />
-      {userError ? (
-        <div className="accounts-container" style={{ color: "red" }}>{userError}</div>
-      ) : !userId ? (
-        <div className="accounts-container">Cargando usuario...</div>
-      ) : loading ? (
-        <div className="accounts-container">Cargando cuentas...</div>
-      ) : error ? (
-        <div className="accounts-container" style={{ color: "red" }}>
-          Error al cargar cuentas: {error.message || error.toString()}
+      <div style={{ display: "flex", alignItems: "flex-start", gap: 40, marginTop: 64, padding: '32px 0 0 0', width: '100%' }}>
+        <div style={{ flex: 1, minWidth: 350 }}>
+          {/* Ajuste: Añadir margen superior a accounts-container para separar del navbar */}
+          {userError ? (
+            <div className="accounts-container" style={{ color: "red", marginTop: 24 }}>{userError}</div>
+          ) : !userId ? (
+            <div className="accounts-container" style={{ marginTop: 24 }}>Cargando usuario...</div>
+          ) : loading ? (
+            <div className="accounts-container" style={{ marginTop: 24 }}>Cargando cuentas...</div>
+          ) : error ? (
+            <div className="accounts-container" style={{ color: "red", marginTop: 24 }}>
+              Error al cargar cuentas: {error.message || error.toString()}
+            </div>
+          ) : (!accounts || accounts.length === 0) ? (
+            <div className="accounts-container" style={{ marginTop: 24 }}>No tienes cuentas registradas.</div>
+          ) : (
+            <div className="accounts-container" style={{ marginTop: 24 }}>
+              {accounts.map((acc, idx) => (
+                <AccountTable
+                  key={acc.accountNumber + idx}
+                  accountNumber={acc.accountNumber}
+                  userName={userName}
+                  balance={acc.balance}
+                  accountType={acc.accountType}
+                />
+              ))}
+            </div>
+          )}
         </div>
-      ) : (!accounts || accounts.length === 0) ? (
-        <div className="accounts-container">No tienes cuentas registradas.</div>
-      ) : (
-        <div className="accounts-container">
-          {accounts.map((acc, idx) => (
-            <AccountTable
-              key={acc.accountNumber + idx}
-              accountNumber={acc.accountNumber}
-              userName={userName}
-              balance={acc.balance}
-              accountType={acc.accountType}
-            />
-          ))}
+        <div style={{ flex: 1, minWidth: 350, display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
+          {/* Mostrar una tarjeta por cada cuenta del usuario */}
+          <CreditCardList accounts={accounts} userName={userName} />
         </div>
-      )}
+      </div>
     </>
   );
 };
