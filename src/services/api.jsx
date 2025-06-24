@@ -56,7 +56,15 @@ export const getUserById = async (uid) => {
 
 export const getAccountsByUser = async (userId) => {
   try {
-    return await apiClient.get(`/account/user/${userId}`);
+    return await apiClient.get(`/accounts/user/${userId}`); // corregido a plural
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const getAccounts = async () => {
+  try {
+    return await apiClient.get("/accounts/listAccounts"); // corregido a plural
   } catch (e) {
     return { error: true, e };
   }

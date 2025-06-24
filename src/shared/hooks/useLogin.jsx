@@ -23,9 +23,12 @@ export const useLogin = () => {
             toast.success(response.data.message || "Inicio de sesión exitoso")
         }
 
-        const { userDetails } = response.data;
 
-        localStorage.setItem('user', JSON.stringify(userDetails))
+        const userDetails = response.data?.userDetails || {};
+
+
+        const { id, uid, _id, ...userDetailsSinId } = userDetails;
+        localStorage.setItem('user', JSON.stringify(userDetailsSinId));
         navigate("/");
         window.location.reload();
         
