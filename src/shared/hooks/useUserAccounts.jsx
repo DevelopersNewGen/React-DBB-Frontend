@@ -17,7 +17,8 @@ export const useUserAccounts = (userId) => {
         if (!isMounted) return;
         const data = res?.data;
         setAccounts(data?.accounts || []);
-        setUserName(data?.name || "");
+        setUserName("");
+        console.log("Accounts Data:", data?.accounts);
       })
       .catch((err) => {
         if (!isMounted) return;
