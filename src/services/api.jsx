@@ -52,11 +52,19 @@ export const getUserById = async (uid) => {
   }
 };
 
+export const getAllUsers = async () => {
+  try {
+    return await apiClient.get("/user");
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
 //Account
 
 export const getAccountsByUser = async (userId) => {
   try {
-    return await apiClient.get(`/accounts/user/${userId}`); // corregido a plural
+    return await apiClient.get(`/accounts/user/${userId}`);
   } catch (e) {
     return { error: true, e };
   }
@@ -64,8 +72,16 @@ export const getAccountsByUser = async (userId) => {
 
 export const getAccounts = async () => {
   try {
-    return await apiClient.get("/accounts/listAccounts"); // corregido a plural
+    return await apiClient.get("/accounts/listAccounts");
   } catch (e) {
     return { error: true, e };
+  }
+};
+
+export const createAccount = async (userId, accountData) => {
+  try {
+    return await apiClient.post(`/accounts/createAccount/${userId}`, accountData);
+  } catch (e) {
+    throw e;
   }
 };

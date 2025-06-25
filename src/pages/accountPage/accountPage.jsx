@@ -5,14 +5,15 @@ import { useUserAccounts } from "../../shared/hooks/useUserAccounts";
 import AccountTable from "../../components/account/AccountTable";
 import { ResponsiveAppBar } from "../../components/Navbar.jsx";
 import { getUser } from "../../services/api";
-import CreditCard from "../../components/account/CreditCard";
 import { CreditCardList } from "../../components/account/CreditCard";
 import AllAccountsTable from "../../components/account/AllAccountsTable";
+import { useNavigate } from "react-router-dom";
 
 export const AccountPage = () => {
   const [userId, setUserId] = useState(null);
   const [userError, setUserError] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getUser()
@@ -58,9 +59,9 @@ export const AccountPage = () => {
             <div className="accounts-container" style={{ marginTop: 24 }}>No tienes cuentas registradas.</div>
           ) : (
             <div className="accounts-container" style={{ marginTop: 24 }}>
-              {accounts.map((acc, idx) => (
+              {accounts.map((acc) => (
                 <AccountTable
-                  key={acc.accountNumber + idx}
+                  key={acc.accountNumber}
                   accountNumber={acc.accountNumber}
                   userName={acc.userName}
                   balance={acc.balance}
