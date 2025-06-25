@@ -9,7 +9,7 @@ import {
   Grid,
   Alert,
 } from "@mui/material";
-import { useUserCreate } from "../../shared/hooks/useUserCreate";
+import { useUserCreate } from "../../shared/hooks";
 
 export const UserAdd = ({ onUserCreated }) => {
   const [open, setOpen] = useState(false);

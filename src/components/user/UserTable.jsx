@@ -1,7 +1,8 @@
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
+import { Button } from "@mui/material";
 
-export const UserTable = ({ users, loading }) => {
+export const UserTable = ({ users, loading, onEditUser }) => {
   const columns = [
     { field: "name", headerName: "Nombre", flex: 1, minWidth: 130 },
     { field: "username", headerName: "Usuario", flex: 1, minWidth: 110 },
@@ -12,6 +13,23 @@ export const UserTable = ({ users, loading }) => {
     { field: "jobName", headerName: "Puesto", flex: 1, minWidth: 120 },
     { field: "monthlyIncome", headerName: "Ingreso Mensual", flex: 1, minWidth: 130 },
     { field: "role", headerName: "Rol", flex: 1, minWidth: 110 },
+    {
+      field: "actions",
+      headerName: "Editar",
+      minWidth: 90, 
+      sortable: false,
+      filterable: false,
+      renderCell: (params) => (
+        <Button
+          variant="outlined"
+          size="small"
+          sx={{ minWidth: 0, px: 1, fontSize: "0.75rem" }} 
+          onClick={() => onEditUser && onEditUser(params.row)}
+        >
+          Editar
+        </Button>
+      ),
+    },
   ];
 
   return (

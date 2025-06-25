@@ -68,4 +68,12 @@ export const createUser = async (userData) => {
     }
 };
 
+export const updateUserAdmin = async (uid, data) => {
+    try {
+        return await apiClient.put(`/user/updateUserAdmin/${uid}`, data);
+    } catch (e) {
+        return { error: true, e };
+    }
+};
+
 
