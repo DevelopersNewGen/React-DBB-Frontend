@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ResponsiveAppBar } from "../../components/Navbar.jsx";
-import { useUserList } from "../../shared/hooks";
+import { useUserList, useUserDelete } from "../../shared/hooks"; 
 import { UserTable } from "../../components/user/UserTable.jsx";
 import { UserAdd } from "../../components/user/UserAdd.jsx";
 import { UserEditAdmin } from "../../components/user/UserEditAdmin.jsx";
@@ -11,6 +11,8 @@ export const UserTablePage = () => {
 
   const [editUser, setEditUser] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
+
+  const { deleteUser, loading: deletingUser } = useUserDelete(); 
 
   const handleUserCreated = () => {
     setRefresh((r) => !r);
@@ -27,6 +29,13 @@ export const UserTablePage = () => {
     if (updated) setRefresh((r) => !r);
   };
 
+ 
+  const handleDeleteUser = async (user) => {
+    const ok = await deleteUser(user.uid);
+    if (ok) setRefresh((r) => !r);
+  
+  };
+
   const clientUsers = users.filter((u) => u.role === "CLIENT_ROLE");
   const adminUsers = users.filter((u) => u.role === "ADMIN_ROLE");
 
@@ -41,21 +50,24 @@ export const UserTablePage = () => {
         <div style={{ marginBottom: 40 }}>
           <UserTable
             users={clientUsers}
-            loading={isLoading}
+            loading={isLoading || deletingUser}
             title="Clientes"
             onEditUser={handleEditUser}
+            onDeleteUser={handleDeleteUser} 
+            showEdit={true}
           />
         </div>
         <div>
           <UserTable
             users={adminUsers}
-            loading={isLoading}
+            loading={isLoading || deletingUser}
             title="Administradores"
             onEditUser={handleEditUser}
+            onDeleteUser={handleDeleteUser} 
+            showEdit={false}
           />
         </div>
 
-        {/* Modal de edición */}
         <UserEditAdmin
           open={editOpen}
           onClose={() => handleEditClose(false)}

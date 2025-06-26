@@ -1,8 +1,31 @@
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
+import { Button, Stack, IconButton, Menu, MenuItem } from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
-export const UserTable = ({ users, loading, onEditUser }) => {
+export const UserTable = ({
+  users,
+  loading,
+  onEditUser,
+  onDeleteUser,
+  onAccountsUser,
+  title,
+  showEdit = true
+}) => {
+  
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [menuRow, setMenuRow] = React.useState(null);
+
+  const handleMenuOpen = (event, row) => {
+    setAnchorEl(event.currentTarget);
+    setMenuRow(row);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setMenuRow(null);
+  };
+
   const columns = [
     { field: "name", headerName: "Nombre", flex: 1, minWidth: 130 },
     { field: "username", headerName: "Usuario", flex: 1, minWidth: 110 },
@@ -15,26 +38,26 @@ export const UserTable = ({ users, loading, onEditUser }) => {
     { field: "role", headerName: "Rol", flex: 1, minWidth: 110 },
     {
       field: "actions",
-      headerName: "Editar",
-      minWidth: 90, 
+      headerName: "Acciones",
+      minWidth: 80,
       sortable: false,
       filterable: false,
       renderCell: (params) => (
-        <Button
-          variant="outlined"
-          size="small"
-          sx={{ minWidth: 0, px: 1, fontSize: "0.75rem" }} 
-          onClick={() => onEditUser && onEditUser(params.row)}
-        >
-          Editar
-        </Button>
+        <>
+          <IconButton
+            size="small"
+            onClick={(e) => handleMenuOpen(e, params.row)}
+          >
+            <MoreVertIcon fontSize="small" />
+          </IconButton>
+        </>
       ),
     },
   ];
 
   return (
     <div>
-      <h2>CLIENTES</h2>
+      <h2>{title}</h2>
       <div style={{ height: 600, width: "100%", overflowX: "auto" }}>
         <DataGrid
           rows={users}
@@ -46,6 +69,47 @@ export const UserTable = ({ users, loading, onEditUser }) => {
           disableRowSelectionOnClick
           autoHeight={false}
         />
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleMenuClose}
+        >
+          <MenuItem
+            onClick={() => {
+              onAccountsUser && onAccountsUser(menuRow);
+              handleMenuClose();
+            }}
+          >
+            Cuentas
+          </MenuItem>
+          {showEdit && [
+            <MenuItem
+              key="edit"
+              onClick={() => {
+                onEditUser && onEditUser(menuRow);
+                handleMenuClose();
+              }}
+            >
+              Editar
+            </MenuItem>,
+            <MenuItem
+              key="delete"
+              onClick={() => {
+                if (
+                  window.confirm(
+                    `¿Seguro que quieres eliminar a ${menuRow?.name || "este usuario"}?`
+                  )
+                ) {
+                  onDeleteUser && onDeleteUser(menuRow);
+                }
+                handleMenuClose();
+              }}
+              sx={{ color: "error.main" }}
+            >
+              Eliminar
+            </MenuItem>
+          ]}
+        </Menu>
       </div>
     </div>
   );

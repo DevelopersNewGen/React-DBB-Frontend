@@ -73,60 +73,6 @@ export const useUser = () => {
     }
   };
 
-  const updateProfilePicture = async (file) => {
-    setIsLoading(true);
-    try {
-      const formData = new FormData();
-      formData.append("img", file);
-
-      const response = await updateUserProfilePicture(formData);
-      if (response?.error) throw response.e;
-
-      const newImgUrl = response?.data?.img;
-      const localUser = JSON.parse(localStorage.getItem("user"));
-
-      if (newImgUrl) {
-        localUser.img = newImgUrl;
-        localStorage.setItem("user", JSON.stringify(localUser));
-        window.location.reload();
-      }
-
-      toast.success(response?.data?.msg || "Imagen de perfil actualizada");
-    } catch (e) {
-      toast.error(
-        "Error al actualizar la imagen: " +
-          (e?.response?.data?.msg ||
-            e?.response?.data?.message ||
-            e?.message ||
-            "Error desconocido")
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const deleteUser = async () => {
-    setIsLoading(true);
-    try {
-      const response = await deleteUserService();
-      if (response?.error) throw response.e;
-
-      localStorage.setItem("user", JSON.stringify(""));
-      toast.success(response?.data?.msg || "Cuenta eliminada");
-      navigate("/auth");
-    } catch (e) {
-      toast.error(
-        "Error al eliminar cuenta: " +
-          (e?.response?.data?.msg ||
-            e?.response?.data?.message ||
-            e?.message ||
-            "Error desconocido")
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
     getUser();
   }, []);
@@ -137,5 +83,7 @@ export const useUser = () => {
     isLoading,
     error,
     getUser,
+    updatePassword,
+    updateUser,
   };
 };

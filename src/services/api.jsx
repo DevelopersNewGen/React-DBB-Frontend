@@ -76,4 +76,12 @@ export const updateUserAdmin = async (uid, data) => {
     }
 };
 
+export const deleteUserAdmin = async (uid) => {
+    try {
+        return await apiClient.delete(`/user/deleteUserAdmin/${uid}`);
+    } catch (e) {
+        return { error: true, e };
+    }
+};
+
 
