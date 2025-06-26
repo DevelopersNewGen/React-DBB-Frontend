@@ -92,8 +92,8 @@ export const UserAdd = ({ onUserCreated }) => {
         <DialogTitle sx={{ color: darkGray }}>Crear Usuario</DialogTitle>
         <DialogContent>
           <form onSubmit={handleSubmit} id="user-add-form">
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+            <Grid container spacing={2} columns={12}>
+              <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
                 <TextField
                   label="Nombre"
                   name="name"
@@ -105,7 +105,7 @@ export const UserAdd = ({ onUserCreated }) => {
                   InputProps={{ style: { color: darkGray } }}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
                 <TextField
                   label="Usuario"
                   name="username"
@@ -117,7 +117,7 @@ export const UserAdd = ({ onUserCreated }) => {
                   InputProps={{ style: { color: darkGray } }}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
                 <TextField
                   label="DPI"
                   name="dpi"
@@ -129,7 +129,7 @@ export const UserAdd = ({ onUserCreated }) => {
                   InputProps={{ style: { color: darkGray } }}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
                 <TextField
                   label="Dirección"
                   name="address"
@@ -141,7 +141,7 @@ export const UserAdd = ({ onUserCreated }) => {
                   InputProps={{ style: { color: darkGray } }}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
                 <TextField
                   label="Teléfono"
                   name="cellphone"
@@ -153,7 +153,7 @@ export const UserAdd = ({ onUserCreated }) => {
                   InputProps={{ style: { color: darkGray } }}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
                 <TextField
                   label="Email"
                   name="email"
@@ -166,7 +166,7 @@ export const UserAdd = ({ onUserCreated }) => {
                   InputProps={{ style: { color: darkGray } }}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
                 <TextField
                   label="Contraseña"
                   name="password"
@@ -179,7 +179,7 @@ export const UserAdd = ({ onUserCreated }) => {
                   InputProps={{ style: { color: darkGray } }}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
                 <TextField
                   label="Puesto"
                   name="jobName"
@@ -191,7 +191,7 @@ export const UserAdd = ({ onUserCreated }) => {
                   InputProps={{ style: { color: darkGray } }}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
                 <TextField
                   label="Ingreso Mensual"
                   name="monthlyIncome"

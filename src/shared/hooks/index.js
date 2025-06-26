@@ -7,3 +7,4 @@ export { useUserCreate } from "./useUserCreate.jsx";
 export { useUserUpdateAdmin } from "./useUserUpdateAdmin.jsx";
 export { useUserDelete } from "./useUserDelete.jsx";
 export { useUserUpdateRole } from "./useUserUpdateRole.jsx";
+export { useUserPassword } from "./useUserPassword.jsx";

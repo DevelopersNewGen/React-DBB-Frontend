@@ -72,8 +72,8 @@ export const UserEditAdmin = ({ open, onClose, user, onUserUpdated }) => {
       <DialogTitle sx={{ color: darkGray }}>Editar Usuario</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit} id="user-edit-form">
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+          <Grid container spacing={2} columns={12}>
+            <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
               <TextField
                 label="Nombre"
                 name="name"
@@ -85,7 +85,7 @@ export const UserEditAdmin = ({ open, onClose, user, onUserUpdated }) => {
                 InputProps={{ style: { color: darkGray } }}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
               <TextField
                 label="Usuario"
                 name="username"
@@ -97,7 +97,7 @@ export const UserEditAdmin = ({ open, onClose, user, onUserUpdated }) => {
                 InputProps={{ style: { color: darkGray } }}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
               <TextField
                 label="DPI"
                 name="dpi"
@@ -109,7 +109,7 @@ export const UserEditAdmin = ({ open, onClose, user, onUserUpdated }) => {
                 InputProps={{ style: { color: darkGray } }}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
               <TextField
                 label="Dirección"
                 name="address"
@@ -121,7 +121,7 @@ export const UserEditAdmin = ({ open, onClose, user, onUserUpdated }) => {
                 InputProps={{ style: { color: darkGray } }}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
               <TextField
                 label="Teléfono"
                 name="cellphone"
@@ -133,7 +133,7 @@ export const UserEditAdmin = ({ open, onClose, user, onUserUpdated }) => {
                 InputProps={{ style: { color: darkGray } }}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
               <TextField
                 label="Email"
                 name="email"
@@ -146,7 +146,7 @@ export const UserEditAdmin = ({ open, onClose, user, onUserUpdated }) => {
                 InputProps={{ style: { color: darkGray } }}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
               <TextField
                 label="Puesto"
                 name="jobName"
@@ -158,7 +158,7 @@ export const UserEditAdmin = ({ open, onClose, user, onUserUpdated }) => {
                 InputProps={{ style: { color: darkGray } }}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
               <TextField
                 label="Ingreso Mensual"
                 name="monthlyIncome"
