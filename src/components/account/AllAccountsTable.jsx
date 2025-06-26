@@ -1,57 +1,32 @@
-import React, { useEffect, useState } from "react";
-import { getAccounts } from "../../services/api";
+import React from "react";
+import { DataGrid } from "@mui/x-data-grid";
+import { useAccounts } from "../../shared/hooks/useAccounts.jsx";
 
 const AllAccountsTable = () => {
-  const [accounts, setAccounts] = useState([]);
+  const { accounts, loading } = useAccounts();
 
-  useEffect(() => {
-    const fetchAccounts = async () => {
-      try {
-        const response = await getAccounts();
-        if (!response.error) {
-          setAccounts(response.data.accounts);
-        } else {
-          console.error("Error fetching accounts:", response.e);
-        }
-      } catch (error) {
-        console.error("Error fetching accounts:", error);
-      }
-    };
-
-    fetchAccounts();
-  }, []);
+  const columns = [
+    { field: "accountNumber", headerName: "Número de Cuenta", flex: 1, minWidth: 250 },
+    { field: "balance", headerName: "Balance", flex: 1, minWidth: 220 },
+    { field: "accountType", headerName: "Tipo de Cuenta", flex: 1, minWidth: 230 },
+    { field: "userName", headerName: "Nombre del Usuario", flex: 1, minWidth: 250 },
+  ];
 
   return (
     <div>
-      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>Todas las Cuentas</h1>
-      {accounts.length === 0 ? (
-        <p style={{ textAlign: "center", color: "#888" }}>
-          Cargando cuentas o no hay datos disponibles.
-        </p>
-      ) : (
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>Número de Cuenta</th>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>Balance</th>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>Tipo de Cuenta</th>
-              <th style={{ border: "1px solid #ddd", padding: "8px" }}>Nombre del Usuario</th>
-            </tr>
-          </thead>
-          <tbody>
-            {accounts.map((account) => (
-              <tr key={account.accountNumber}>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>{account.accountNumber}</td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>{account.balance}</td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>{account.accountType}</td>
-                <td style={{ border: "1px solid #ddd", padding: "8px" }}>
-                  {account.user?.name || "Sin usuario"}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Todas las Cuentas</h2>
+      <div style={{ height: 700, width: "100%", overflowX: "auto" }}>
+        <DataGrid
+          rows={accounts}
+          columns={columns}
+          loading={loading}
+          getRowId={(row) => row.accountNumber}
+          pageSize={10}
+          rowsPerPageOptions={[10, 20, 40]}
+          disableRowSelectionOnClick
+          autoHeight={false}
+        />
+      </div>
     </div>
   );
 };
