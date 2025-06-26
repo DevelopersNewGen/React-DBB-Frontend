@@ -11,7 +11,7 @@ const getTypeLabel = (type) => {
   }
 };
 
-const AccountTable = ({ accountNumber, userName, balance, accountType }) => (
+const AccountTable = ({ accountNumber, balance, accountType }) => (
   <div className="account-block" style={{ marginBottom: "32px" }}>
     <h2 className="account-title" style={{ fontSize: "1.75rem", fontWeight: 700, letterSpacing: "0.05em" }}>
       CUENTA: {getTypeLabel(accountType)}
@@ -23,7 +23,7 @@ const AccountTable = ({ accountNumber, userName, balance, accountType }) => (
         className="account-table-header"
         style={{
           display: "grid",
-          gridTemplateColumns: "2fr 4fr 2fr",
+          gridTemplateColumns: "2fr 2fr",
           padding: "18px 32px",
           fontSize: "1.15rem",
           fontWeight: 700,
@@ -32,7 +32,6 @@ const AccountTable = ({ accountNumber, userName, balance, accountType }) => (
         }}
       >
         <span>NO. CUENTA</span>
-        <span style={{ textAlign: "center" }}>NOMBRE</span>
         <span style={{ textAlign: "right" }}>DISPONIBLE</span>
       </div>
 
@@ -40,7 +39,7 @@ const AccountTable = ({ accountNumber, userName, balance, accountType }) => (
         className="account-table-row"
         style={{
           display: "grid",
-          gridTemplateColumns: "2fr 4fr 2fr",
+          gridTemplateColumns: "2fr 2fr",
           padding: "20px 32px",
           fontSize: "1.1rem",
           fontWeight: 500,
@@ -48,7 +47,6 @@ const AccountTable = ({ accountNumber, userName, balance, accountType }) => (
         }}
       >
         <span style={{ wordBreak: "break-word" }}>{accountNumber}</span>
-        <span style={{ textAlign: "center" }}>{userName}</span>
         <span style={{ textAlign: "right" }}>
           Q
           {balance.toLocaleString(undefined, {

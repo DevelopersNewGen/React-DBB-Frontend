@@ -35,6 +35,7 @@ const AllAccountsTable = () => {
               <th style={{ border: "1px solid #ddd", padding: "8px" }}>Número de Cuenta</th>
               <th style={{ border: "1px solid #ddd", padding: "8px" }}>Balance</th>
               <th style={{ border: "1px solid #ddd", padding: "8px" }}>Tipo de Cuenta</th>
+              <th style={{ border: "1px solid #ddd", padding: "8px" }}>Nombre del Usuario</th>
             </tr>
           </thead>
           <tbody>
@@ -43,6 +44,9 @@ const AllAccountsTable = () => {
                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>{account.accountNumber}</td>
                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>{account.balance}</td>
                 <td style={{ border: "1px solid #ddd", padding: "8px" }}>{account.accountType}</td>
+                <td style={{ border: "1px solid #ddd", padding: "8px" }}>
+                  {account.user?.name || "Sin usuario"}
+                </td>
               </tr>
             ))}
           </tbody>

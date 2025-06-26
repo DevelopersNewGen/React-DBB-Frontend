@@ -24,14 +24,12 @@ const CreateAccountForm = () => {
         balance: parseFloat(formData.balance),
       };
 
-      console.log("Datos enviados al backend:", dataToSend);
 
       await createAccount(uid, dataToSend);
 
       alert("Cuenta creada exitosamente");
-      navigate("/");
+      navigate("/cuentas");
     } catch (error) {
-      console.error("Error al crear la cuenta:", error.response?.data || error);
       alert(error.response?.data?.msg || "Error al crear la cuenta");
     }
   };

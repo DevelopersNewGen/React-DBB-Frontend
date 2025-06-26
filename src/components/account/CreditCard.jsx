@@ -159,7 +159,6 @@ const CreditCardList = ({ accounts = [], userName = "" }) => {
               transition: "transform 0.25s cubic-bezier(.4,2,.6,1), box-shadow 0.25s cubic-bezier(.4,2,.6,1)",
               cursor: "pointer",
             }}
-            onClick={() => navigate(`/cuentas/${acc.accountNumber}`)}
           >
             <CreditCard
               cardNumber={acc.accountNumber}
