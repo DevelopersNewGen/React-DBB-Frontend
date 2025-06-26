@@ -8,3 +8,4 @@ export { useUserUpdateAdmin } from "./useUserUpdateAdmin.jsx";
 export { useUserDelete } from "./useUserDelete.jsx";
 export { useUserUpdateRole } from "./useUserUpdateRole.jsx";
 export { useUserPassword } from "./useUserPassword.jsx";
+export { useUserUpdate } from "./useUserUpdate.jsx";

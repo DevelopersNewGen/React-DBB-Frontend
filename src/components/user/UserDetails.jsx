@@ -8,11 +8,13 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import EditIcon from "@mui/icons-material/Edit";
 import LockResetIcon from "@mui/icons-material/LockReset";
 import { UserPassword } from "./UserPassword";
+import { UserEdit } from "./userEdit";
 
 export const UserDetails = () => {
   const { user, isLoading } = useUser();
   const navigate = useNavigate();
   const [openPassword, setOpenPassword] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
 
   if (isLoading) return <Typography variant="h6">Cargando...</Typography>;
   if (!user) return <Typography variant="h6">No hay datos de usuario.</Typography>;
@@ -221,7 +223,7 @@ export const UserDetails = () => {
               "&:hover": { background: "#1e2233" },
               py: 1.5,
             }}
-            onClick={() => navigate("/profile/edit")}
+            onClick={() => setOpenEdit(true)}
             fullWidth
             startIcon={<EditIcon sx={{ fontSize: 34, color: "#5470a6" }} />}
           >
@@ -244,6 +246,7 @@ export const UserDetails = () => {
             CAMBIAR CONTRASEÑA
           </Button>
         </Stack>
+        <UserEdit open={openEdit} onClose={() => setOpenEdit(false)} user={user} />
         <UserPassword open={openPassword} onClose={() => setOpenPassword(false)} />
       </Box>
     </Box>

@@ -1,10 +1,20 @@
-import React, { useState } from "react";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, MenuItem, Select, FormControl, InputLabel } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
 
 export const UserEditRole = ({ open, onClose, user, onSave, loading }) => {
   const [role, setRole] = useState(user?.role || "");
 
-  React.useEffect(() => {
+  useEffect(() => {
     setRole(user?.role || "");
   }, [user]);
 
@@ -15,7 +25,7 @@ export const UserEditRole = ({ open, onClose, user, onSave, loading }) => {
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
       <DialogTitle>Cambiar Rol de Usuario</DialogTitle>
       <DialogContent>
         <FormControl fullWidth sx={{ mt: 2 }}>
@@ -32,8 +42,14 @@ export const UserEditRole = ({ open, onClose, user, onSave, loading }) => {
         </FormControl>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} disabled={loading}>Cancelar</Button>
-        <Button onClick={handleSave} disabled={loading || !role} variant="contained">
+        <Button onClick={onClose} disabled={loading}>
+          Cancelar
+        </Button>
+        <Button
+          onClick={handleSave}
+          disabled={loading || !role}
+          variant="contained"
+        >
           Guardar
         </Button>
       </DialogActions>
