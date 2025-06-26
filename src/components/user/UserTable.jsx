@@ -1,7 +1,9 @@
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button, Stack, IconButton, Menu, MenuItem } from "@mui/material";
+import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { UserEditRole } from "./UserEditRole";
+import { useUserUpdateRole } from "../../shared/hooks";
 
 export const UserTable = ({
   users,
@@ -12,9 +14,14 @@ export const UserTable = ({
   title,
   showEdit = true
 }) => {
-  
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [menuRow, setMenuRow] = React.useState(null);
+
+  
+  const [roleModalOpen, setRoleModalOpen] = React.useState(false);
+  const [selectedUser, setSelectedUser] = React.useState(null);
+
+  const { changeUserRole, loading: changingRole } = useUserUpdateRole();
 
   const handleMenuOpen = (event, row) => {
     setAnchorEl(event.currentTarget);
@@ -24,6 +31,26 @@ export const UserTable = ({
   const handleMenuClose = () => {
     setAnchorEl(null);
     setMenuRow(null);
+  };
+
+  const handleOpenRoleModal = () => {
+    setSelectedUser(menuRow);
+    setRoleModalOpen(true);
+    handleMenuClose();
+  };
+
+  const handleCloseRoleModal = () => {
+    setRoleModalOpen(false);
+    setSelectedUser(null);
+  };
+
+  const handleSaveRole = async (uid, newRole) => {
+    const ok = await changeUserRole(uid, newRole);
+    if (ok) {
+      handleCloseRoleModal();
+      
+      window.location.reload();
+    }
   };
 
   const columns = [
@@ -107,9 +134,25 @@ export const UserTable = ({
               sx={{ color: "error.main" }}
             >
               Eliminar
-            </MenuItem>
+            </MenuItem>,
+            
+            menuRow?.role === "CLIENT_ROLE" && (
+              <MenuItem
+                key="change-role"
+                onClick={handleOpenRoleModal}
+              >
+                Cambiar Rol
+              </MenuItem>
+            )
           ]}
         </Menu>
+        <UserEditRole
+          open={roleModalOpen}
+          onClose={handleCloseRoleModal}
+          user={selectedUser}
+          onSave={handleSaveRole}
+          loading={changingRole}
+        />
       </div>
     </div>
   );
