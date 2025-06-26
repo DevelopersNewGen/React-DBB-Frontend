@@ -101,3 +101,69 @@ export const createAccount = async (userId, accountData) => {
     throw e;
   }
 };
+
+//Movements
+
+export const makeDeposit = async (depositData) => {
+  try {
+    return await apiClient.post("/movement/deposit", depositData);
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const updateDepositAmount = async (mid, updateData) => {
+  try {
+    return await apiClient.patch(`/movement/deposit/${mid}`, updateData);
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const revertDepositAmount = async (mid, revertData) => {
+  try {
+    return await apiClient.delete(`/movement/deposit/${mid}`, { data: revertData });
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const makeWithdrawal = async (withdrawalData) => {
+  try {
+    return await apiClient.patch("/movement/withdrawal", withdrawalData);
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const getAccountMovements = async (aid) => {
+  try {
+    return await apiClient.get(`/movement/account/${aid}`);
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const getTopMovements = async () => {
+  try {
+    return await apiClient.get("/movement/top");
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const makeTransfer = async (originAccount, transferData) => {
+  try {
+    return await apiClient.post(`/movement/transfer/${originAccount}`, transferData);
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const getMyRecentMovements = async (aid) => {
+  try {
+    return await apiClient.get(`/movement/recent/${aid}`);
+  } catch (e) {
+    return { error: true, e };
+  }
+};
