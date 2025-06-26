@@ -76,6 +76,38 @@ export const updateUserAdmin = async (uid, data) => {
     }
 };
 
+export const deleteUserAdmin = async (uid) => {
+    try {
+        return await apiClient.delete(`/user/deleteUserAdmin/${uid}`);
+    } catch (e) {
+        return { error: true, e };
+    }
+};
+
+export const updateUser = async (data) => {
+    try {
+        return await apiClient.put('/user/updateUser', data);
+    } catch (e) {
+        return { error: true, e };
+    }
+};
+
+export const updateUserPassword = async (data) => {
+    try {
+        return await apiClient.patch('/user/updatePassword', data);
+    } catch (e) {
+        return { error: true, e };
+    }
+};
+
+export const updateRole = async (uid, newRole) => {
+    try {
+        return await apiClient.patch(`/user/updateRole/${uid}`, { newRole });
+    } catch (e) {
+        return { error: true, e };
+    }
+};
+
 //Account
 
 export const getAccountsByUser = async (userId) => {
