@@ -27,37 +27,53 @@ apiClient.interceptors.request.use(
 );
 
 export const login = async (emailOrUsername, password) => {
-  try {
-    return await apiClient.post("/auth/login", { emailOrUsername, password });
-  } catch (e) {
-    return { error: true, e };
-  }
+    try {
+        return await apiClient.post('/auth/login', { emailOrUsername, password });
+    } catch (e) {
+        return { error: true, e };
+    }
 };
 
 //User
 
 export const getUser = async () => {
-  try {
-    return await apiClient.get(`/user/getUser`);
-  } catch (e) {
-    return { error: true, e };
-  }
+    try {
+        return await apiClient.get(`/user/getUser`);
+    } catch (e) {
+        return { error: true, e };
+    }
 };
 
 export const getUserById = async (uid) => {
-  try {
-    return await apiClient.get(`/user/findUser/${uid}`);
-  } catch (e) {
-    return { error: true, e };
-  }
+    try {
+        return await apiClient.get(`/user/findUser/${uid}`);
+    } catch (e) {
+        return { error: true, e };
+    }
 };
 
-export const getAllUsers = async () => {
-  try {
-    return await apiClient.get("/user");
-  } catch (e) {
-    return { error: true, e };
-  }
+export const getUsers = async () => {
+    try {
+        return await apiClient.get('/user/');
+    } catch (e) {
+        return { error: true, e };
+    }
+};
+
+export const createUser = async (userData) => {
+    try {
+        return await apiClient.post('/user/createUser', userData);
+    } catch (e) {
+        return { error: true, e };
+    }
+};
+
+export const updateUserAdmin = async (uid, data) => {
+    try {
+        return await apiClient.put(`/user/updateUserAdmin/${uid}`, data);
+    } catch (e) {
+        return { error: true, e };
+    }
 };
 
 //Account
