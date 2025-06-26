@@ -1,22 +1,18 @@
 import React, { useState } from "react";
-import {
-  TextField,
-  Button,
-  Box,
-  Typography,
-  Paper,
-} from "@mui/material";
+import {TextField, Button, Box, Typography, Paper, Modal, Fade,} from "@mui/material";
+import { CheckCircleOutline } from "@mui/icons-material";
 import { useUserAccounts } from "../../shared/hooks/useUserAccounts";
 
 const TransferForm = ({ onSubmit, loading }) => {
   const { accounts } = useUserAccounts();
-
   const [form, setForm] = useState({
     originAccount: "",
     destinationAccount: "",
     amount: "",
     description: "",
   });
+
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -29,31 +25,30 @@ const TransferForm = ({ onSubmit, loading }) => {
   const isFormValid =
     form.originAccount &&
     form.destinationAccount &&
-    form.amount > 0;
+    parseFloat(form.amount) > 0;
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!isFormValid) return;
+
+    const selected = accounts.find(
+      (acc) => acc.accountNumber === form.originAccount
+    );
+
+    if (onSubmit && selected?.accountNumber) {
+      onSubmit({ ...form, originAccount: selected.accountNumber });
+      setShowSuccessModal(true);
+      setTimeout(() => setShowSuccessModal(false), 2000);
+    }
+  };
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+    <Box sx={{ display: "flex", justifyContent: "center", mt: 4, gap: 5, fontWeight: "bold" }}>
       <Box sx={{ maxWidth: 400, width: "100%" }}>
         <Typography variant="h5" mb={2}>
           Transferencia
         </Typography>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (!isFormValid) return;
-
-            const selected = accounts.find(
-              (acc) => acc.accountNumber === form.originAccount
-            );
-
-            if (onSubmit && selected?.accountNumber) {
-              onSubmit({
-                ...form,
-                originAccount: selected.accountNumber,
-              });
-            }
-          }}
-        >
+        <form onSubmit={handleSubmit}>
           <TextField
             label="Cuenta Destino (ID)"
             name="destinationAccount"
@@ -89,60 +84,101 @@ const TransferForm = ({ onSubmit, loading }) => {
             disabled={loading || !isFormValid}
             sx={{ mt: 2 }}
           >
-            Transferir
+            TRANSFERIR
           </Button>
         </form>
       </Box>
 
-      {/* Cuentas a la derecha */}
-      <Box sx={{ minWidth: 400, ml: 10 }}>
-        <Typography variant="subtitle1" mb={1}>
+      <Box sx={{ minWidth: 400 }}>
+        <Typography variant="subtitle1" mb={2} fontWeight="bold">
           Selecciona la cuenta de origen:
         </Typography>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
           {accounts.map((acc, idx) => {
             const isSelected = form.originAccount === acc.accountNumber;
-
             return (
-              <Paper
-                key={acc.accountNumber || `fallback-${idx}`}
-                elevation={isSelected ? 6 : 1}
-                sx={{
-                  p: 2,
-                  cursor: "pointer",
-                  border: isSelected ? "2px solid #1976d2" : "1px solid #ccc",
-                  background: isSelected ? "#e3f2fd" : "#fff",
-                  transition: "all 0.2s",
-                  position: "relative",
-                }}
-                onClick={() => handleSelectOrigin(acc.accountNumber)}
-              >
-                <Typography variant="body1" fontWeight={600}>
-                  {acc.accountNumber}
+              <Box key={idx}>
+                <Typography
+                  variant="subtitle2"
+                  fontWeight="bold"
+                  sx={{ borderBottom: "2px solid black" }}
+                >
+                  CUENTA: {acc.accountType?.toUpperCase()}
                 </Typography>
-                <Typography variant="body2">Q{acc.balance}</Typography>
-                <Typography variant="caption" color="text.secondary">
-                  {acc.accountType}
-                </Typography>
-                {isSelected && (
-                  <Typography
-                    variant="caption"
+                <Paper
+                  elevation={4}
+                  onClick={() => handleSelectOrigin(acc.accountNumber)}
+                  sx={{
+                    mt: 1,
+                    backgroundColor: "#000",
+                    color: "#fff",
+                    borderRadius: 2,
+                    p: 2,
+                    cursor: "pointer",
+                    border: isSelected ? "2px solid #1976d2" : "none",
+                    transition: "all 0.3s ease-in-out",
+                  }}
+                >
+                  <Box
                     sx={{
-                      position: "absolute",
-                      top: 8,
-                      right: 12,
-                      color: "green",
+                      display: "flex",
+                      justifyContent: "space-between",
                       fontWeight: "bold",
+                      borderBottom: "1px solid #fff",
+                      pb: 1,
+                      mb: 1,
                     }}
                   >
-                    ✓ Seleccionada
-                  </Typography>
-                )}
-              </Paper>
+                    <Typography variant="body2">NO. CUENTA</Typography>
+                    <Typography variant="body2">DISPONIBLE</Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      fontFamily: "monospace",
+                    }}
+                  >
+                    <Typography variant="body1">
+                      {acc.accountNumber}
+                    </Typography>
+                    <Typography variant="body1">
+                      Q{Number(acc.balance).toFixed(2)}
+                    </Typography>
+                  </Box>
+                </Paper>
+              </Box>
             );
           })}
         </Box>
       </Box>
+
+      {/* Modal animado con check */}
+      <Modal open={showSuccessModal} closeAfterTransition>
+        <Fade in={showSuccessModal}>
+          <Box
+            sx={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100vw",
+              height: "100vh",
+              bgcolor: "rgba(255,255,255,0.95)",
+              zIndex: 9999,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+              textAlign: "center",
+            }}
+          >
+            <CheckCircleOutline sx={{ fontSize: 100, color: "green" }} />
+            <Typography variant="h5" mt={2} fontWeight="bold">
+              ¡Transferencia exitosa!
+            </Typography>
+          </Box>
+        </Fade>
+      </Modal>
     </Box>
   );
 };

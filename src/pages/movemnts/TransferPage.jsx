@@ -24,11 +24,6 @@ export const TransferPage = () => {
             {typeof error === "string" ? error : "Error al transferir"}
           </Alert>
         )}
-        {success && resultMsg && (
-          <Alert severity="success" sx={{ mt: 2, maxWidth: 400, mx: "auto" }}>
-            {resultMsg}
-          </Alert>
-        )}
       </div>
     </>
   );
