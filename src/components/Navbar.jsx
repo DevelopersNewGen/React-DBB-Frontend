@@ -29,7 +29,8 @@ const pagesAdmin = [
   { name: 'Cuentas', path: '/cuentas', icon: <AccountBalanceIcon sx={{ mr: 1 }} /> },
   { name: 'Servicios', path: '/servicios', icon: <ReceiptLongIcon sx={{ mr: 1 }} /> },
   { name: 'Clientes', path: '/clientes', icon: <GroupIcon sx={{ mr: 1 }} /> },
-  { name: 'Depositar', path: '/depositar', icon: <PaidIcon sx={{ mr: 1 }} /> }
+  { name: 'Depositar', path: '/depositar', icon: <PaidIcon sx={{ mr: 1 }} /> },
+  { name: 'Retirar', path: '/retirar', icon: <PaidIcon sx={{ mr: 1 }} /> }
 ];
 
 const pagesUser = [

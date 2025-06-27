@@ -130,7 +130,7 @@ export const revertDepositAmount = async (mid, revertData) => {
 
 export const makeWithdrawal = async (withdrawalData) => {
   try {
-    return await apiClient.patch("/movement/withdrawal", withdrawalData);
+    return await apiClient.post("/movement/withdrawal", withdrawalData);
   } catch (e) {
     return { error: true, e };
   }

@@ -5,6 +5,7 @@ import { UserTablePage } from "./pages/user/UserTablePage";
 import { TransferPage } from "./pages/movemnts/TransferPage";
 import CreateAccountForm from "./components/account/CreateAccountForm"; 
 import  MakeDepositPage  from "./pages/movemnts/MakeDepositPage.jsx";
+import MakeWithdrawalPage from "./pages/movemnts/MakeWithdrawalPage.jsx";
 
 const routes = [
   { path: "/auth", element: <AuthPage /> },
@@ -14,6 +15,7 @@ const routes = [
   { path: "/create-account/:uid", element: <CreateAccountForm /> },
   { path: "/depositar", element: <MakeDepositPage /> },
   { path: "/*", element: <DashboardPage /> },
+  { path: "/retirar", element: <MakeWithdrawalPage /> }
 ];
 
 export default routes;
