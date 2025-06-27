@@ -108,4 +108,19 @@ export const updateRole = async (uid, newRole) => {
     }
 };
 
+export const getUserFavorites = async () => {
+  try {
+    const res = await apiClient.get('/user/getUser');
+    return { data: res.data.user.favs };
+  } catch (e) {
+    return { error: true, e };
+  }
+};
 
+export const addFavoriteAccount = async ({ accountNumber, alias }) => {
+  try {
+    return await apiClient.patch('/user/favoriteAccount', { accountNumber, alias });
+  } catch (e) {
+    return { error: true, e };
+  }
+};
