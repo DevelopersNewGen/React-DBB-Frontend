@@ -4,7 +4,7 @@ import { CheckCircleOutline } from "@mui/icons-material";
 import { useUserAccounts } from "../../shared/hooks/useUserAccounts";
 
 const TransferForm = ({ onSubmit, loading }) => {
-  const { accounts } = useUserAccounts();
+  const { accounts, refetch } = useUserAccounts();
   const [form, setForm] = useState({
     originAccount: "",
     destinationAccount: "",
@@ -27,7 +27,7 @@ const TransferForm = ({ onSubmit, loading }) => {
     form.destinationAccount &&
     parseFloat(form.amount) > 0;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isFormValid) return;
 
@@ -36,10 +36,18 @@ const TransferForm = ({ onSubmit, loading }) => {
     );
 
     if (onSubmit && selected?.accountNumber) {
-      onSubmit({ ...form, originAccount: selected.accountNumber });
+      await onSubmit({ ...form, originAccount: selected.accountNumber });
       setShowSuccessModal(true);
+      await refetch(); 
       setTimeout(() => setShowSuccessModal(false), 2000);
     }
+
+    setForm({
+      originAccount: "",
+      destinationAccount: "",
+      amount: "",
+      description: "",
+    });
   };
 
   return (

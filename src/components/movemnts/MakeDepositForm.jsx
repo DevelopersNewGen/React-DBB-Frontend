@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import useMakeDeposit from "../../shared/hooks/useMakeDeposit";
-import { useUserAccounts } from "../../shared/hooks/useUserAccounts";
-import { TextField, Button, Typography, Box, CircularProgress } from "@mui/material";
+import { useAdminAccounts } from "../../shared/hooks/useAdminAccounts";
+import { TextField, Button, Typography, Box, CircularProgress, Autocomplete } from "@mui/material";
 
 const MakeDepositForm = () => {
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [destinationAccount, setDestinationAccount] = useState("");
   const { deposit, loading, success, error } = useMakeDeposit();
-  const { accounts, loading: accountsLoading } = useUserAccounts();
+  const { accounts, loading: isLoading } = useAdminAccounts();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,32 +23,23 @@ const MakeDepositForm = () => {
       <Typography variant="h5" mb={2}>Realizar Depósito</Typography>
 
       <Box sx={{ display: "flex", flexDirection: "column", mb: 2 }}>
-        <label htmlFor="destinationAccount" style={{ marginBottom: 4, fontWeight: 500, color: "rgba(0, 0, 0, 0.87)" }}>Cuenta destino:</label>
-        <select
+        <Autocomplete
           id="destinationAccount"
-          value={destinationAccount}
-          onChange={(e) => setDestinationAccount(e.target.value)}
-          required
-          disabled={accountsLoading}
-          style={{
-            padding: "10.5px 14px",
-            fontSize: "1rem",
-            border: "1px solid rgba(0, 0, 0, 0.23)",
-            borderRadius: 4,
-            backgroundColor: "#fff",
-            transition: "border-color 0.3s",
-            outline: "none"
-          }}
-          onFocus={(e) => e.target.style.borderColor = "#1976d2"}
-          onBlur={(e) => e.target.style.borderColor = "rgba(0, 0, 0, 0.23)"}
-        >
-          <option value="">Selecciona una cuenta</option>
-          {accounts.map((acc) => (
-            <option key={acc.accountNumber} value={acc.accountNumber}>
-              {acc.accountNumber} - {acc.accountType}
-            </option>
-          ))}
-        </select>
+          options={accounts}
+          getOptionLabel={(acc) => acc ? `${acc.accountNumber} - ${acc.accountType}` : ""}
+          value={accounts.find(acc => acc.accountNumber === destinationAccount) || null}
+          onChange={(_, newValue) => setDestinationAccount(newValue ? newValue.accountNumber : "")}
+          loading={isLoading}
+          disabled={isLoading}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Cuenta destino"
+              required
+              margin="normal"
+            />
+          )}
+        />
       </Box>
 
       <TextField
@@ -68,11 +59,10 @@ const MakeDepositForm = () => {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         fullWidth
-        required
         margin="normal"
       />
 
-      <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading || accountsLoading}>
+      <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading || isLoading}>
         {loading ? <CircularProgress size={24} /> : "Depositar"}
       </Button>
 
