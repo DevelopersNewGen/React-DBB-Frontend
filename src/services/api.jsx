@@ -167,3 +167,13 @@ export const getMyRecentMovements = async (aid) => {
     return { error: true, e };
   }
 };
+
+export const getAllMovements = async (page = 0, rowsPerPage = 10,) => {
+  try {
+    const from = page * rowsPerPage;
+    const limit = rowsPerPage;
+    return await apiClient.get(`/movement?from=${from}&limit=${limit}`);
+  } catch (e) {
+    return { error: true, e };
+  }
+}
