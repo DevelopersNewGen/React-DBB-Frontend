@@ -1,9 +1,62 @@
-import { useNavigate } from "react-router-dom";
+import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
+import { IconButton, Menu, MenuItem } from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { UserEditRole } from "./UserEditRole";
+import { useUserUpdateRole } from "../../shared/hooks";
+import { useNavigate } from "react-router-dom";
 
-export const UserTable = ({ users, loading, onEditUser }) => {
+export const UserTable = ({
+  users,
+  loading,
+  onEditUser,
+  onDeleteUser,
+  onAccountsUser,
+  title,
+  showEdit = true,
+}) => {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [menuRow, setMenuRow] = React.useState(null);
+  const [roleModalOpen, setRoleModalOpen] = React.useState(false);
+  const [selectedUser, setSelectedUser] = React.useState(null);
+  const { changeUserRole, loading: changingRole } = useUserUpdateRole();
   const navigate = useNavigate();
+
+  const handleMenuOpen = (event, row) => {
+    setAnchorEl(event.currentTarget);
+    setMenuRow(row);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setMenuRow(null);
+  };
+
+  const handleOpenRoleModal = () => {
+    setSelectedUser(menuRow);
+    setRoleModalOpen(true);
+    handleMenuClose();
+  };
+
+  const handleCloseRoleModal = () => {
+    setRoleModalOpen(false);
+    setSelectedUser(null);
+  };
+
+  const handleSaveRole = async (uid, newRole) => {
+    const ok = await changeUserRole(uid, newRole);
+    if (ok) {
+      handleCloseRoleModal();
+      window.location.reload();
+    }
+  };
+
+  const handleCreateAccount = () => {
+    if (menuRow?.uid) {
+      navigate(`/create-account/${menuRow.uid}`);
+    }
+    handleMenuClose();
+  };
 
   const columns = [
     { field: "name", headerName: "Nombre", flex: 1, minWidth: 130 },
@@ -18,35 +71,25 @@ export const UserTable = ({ users, loading, onEditUser }) => {
     {
       field: "actions",
       headerName: "Acciones",
-      minWidth: 200,
+      minWidth: 80,
       sortable: false,
       filterable: false,
       renderCell: (params) => (
-        <div style={{ display: "flex", gap: "8px" }}>
-          <Button
-            variant="outlined"
+        <>
+          <IconButton
             size="small"
-            sx={{ minWidth: 0, px: 1, fontSize: "0.75rem" }}
-            onClick={() => onEditUser && onEditUser(params.row)}
+            onClick={(e) => handleMenuOpen(e, params.row)}
           >
-            Editar
-          </Button>
-          <Button
-            variant="contained"
-            size="small"
-            sx={{ minWidth: 0, px: 1, fontSize: "0.75rem" }}
-            onClick={() => navigate(`/create-account/${params.row.uid}`)}
-          >
-            Crear Cuenta
-          </Button>
-        </div>
+            <MoreVertIcon fontSize="small" />
+          </IconButton>
+        </>
       ),
     },
   ];
 
   return (
     <div>
-      <h2>CLIENTES</h2>
+      <h2>{title}</h2>
       <div style={{ height: 600, width: "100%", overflowX: "auto" }}>
         <DataGrid
           rows={users}
@@ -57,6 +100,60 @@ export const UserTable = ({ users, loading, onEditUser }) => {
           rowsPerPageOptions={[10, 20, 40]}
           disableRowSelectionOnClick
           autoHeight={false}
+        />
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleMenuClose}
+        >
+          <MenuItem
+            onClick={() => {
+              onAccountsUser && onAccountsUser(menuRow);
+              handleMenuClose();
+            }}
+          >
+            Cuentas
+          </MenuItem>
+          <MenuItem onClick={handleCreateAccount}>Crear Cuenta</MenuItem>
+          {showEdit && [
+            <MenuItem
+              key="edit"
+              onClick={() => {
+                onEditUser && onEditUser(menuRow);
+                handleMenuClose();
+              }}
+            >
+              Editar
+            </MenuItem>,
+            <MenuItem
+              key="delete"
+              onClick={() => {
+                if (
+                  window.confirm(
+                    `¿Seguro que quieres eliminar a ${menuRow?.name || "este usuario"}?`
+                  )
+                ) {
+                  onDeleteUser && onDeleteUser(menuRow);
+                }
+                handleMenuClose();
+              }}
+              sx={{ color: "error.main" }}
+            >
+              Eliminar
+            </MenuItem>,
+            menuRow?.role === "CLIENT_ROLE" && (
+              <MenuItem key="change-role" onClick={handleOpenRoleModal}>
+                Cambiar Rol
+              </MenuItem>
+            ),
+          ]}
+        </Menu>
+        <UserEditRole
+          open={roleModalOpen}
+          onClose={handleCloseRoleModal}
+          user={selectedUser}
+          onSave={handleSaveRole}
+          loading={changingRole}
         />
       </div>
     </div>
