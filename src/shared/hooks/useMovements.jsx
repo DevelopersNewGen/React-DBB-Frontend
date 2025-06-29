@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import { getAllMovements } from "../../services";
+import { getAllMovements, getUserMovements } from "../../services";
 
-export const useMovements = () => {
+export const useMovements = (role) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [response, setResponse] = useState([]);
@@ -10,9 +10,21 @@ export const useMovements = () => {
   const [total, setTotal] = useState(0);
 
   const fetchMovements = useCallback(async () => {
+    if (!role) return; 
     setLoading(true);
     setError(null);
     try {
+      if (role !== "ADMIN_ROLE") {
+        const res = await getUserMovements(page, rowsPerPage);
+        if (res.error) {
+          setError(res.e?.response?.data?.msg || "Error al listar movimientos");
+          setResponse([]);
+          return;
+        }
+        setResponse(res.data.movements || []);
+        setTotal(res.data.total);
+        return;
+      }
       const res = await getAllMovements(page, rowsPerPage);
       if (res.error) {
         setError(res.e?.response?.data?.msg || "Error al listar movimientos");
@@ -27,7 +39,7 @@ export const useMovements = () => {
     } finally {
       setLoading(false);
     }
-  }, [page, rowsPerPage]);
+  }, [role, page, rowsPerPage]);
 
   useEffect(() => {
     fetchMovements();
@@ -43,6 +55,6 @@ export const useMovements = () => {
     rowsPerPage,
     setRowsPerPage,
     total
-  };
+  };  
 };
 

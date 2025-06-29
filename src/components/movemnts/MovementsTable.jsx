@@ -17,8 +17,8 @@ const typeColors = {
     TRANSFER: "info",
 };
 
-export const MovementsTable = () => {
-    const { response, page, setPage, rowsPerPage, setRowsPerPage, total, loading } = useMovements();
+export const MovementsTable = ({role}) => {
+    const { response, page, setPage, rowsPerPage, setRowsPerPage, total, loading } = useMovements(role);
     const [search, setSearch] = useState("");
 
     const filteredMovements = useMemo(() => {
