@@ -168,9 +168,9 @@ export const makeWithdrawal = async (withdrawalData) => {
   }
 };
 
-export const getAccountMovements = async (aid) => {
+export const getAccountMovements = async (aid, from = 0, limit = 10) => {
   try {
-    return await apiClient.get(`/movement/account/${aid}`);
+    return await apiClient.get(`/movement/account/${aid}?from=${from}&limit=${limit}`);
   } catch (e) {
     return { error: true, e };
   }

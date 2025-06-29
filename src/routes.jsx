@@ -4,6 +4,7 @@ import { AccountPage } from "./pages/accountPage/accountPage";
 import { UserTablePage } from "./pages/user/UserTablePage";
 import { TransferPage } from "./pages/movemnts/TransferPage";
 import { MovementsPage } from "./pages/movemnts/MovementsPage.jsx";
+import { AccountMovements } from "./pages/movemnts/AccountMovements.jsx";
 import CreateAccountForm from "./components/account/CreateAccountForm"; 
 import  MakeDepositPage  from "./pages/movemnts/MakeDepositPage.jsx";
 import MakeWithdrawalPage from "./pages/movemnts/MakeWithdrawalPage.jsx";
@@ -18,6 +19,7 @@ const routes = [
   { path: "/*", element: <DashboardPage /> },
   { path: "/retirar", element: <MakeWithdrawalPage /> },
   { path: "/movimientos/:accountId", element: <MovementsPage /> },
+  { path: "/movimientos/cuenta/:accountId", element: <AccountMovements /> },
   { path: "/movimientos", element: <MovementsPage /> }
 ];
 
