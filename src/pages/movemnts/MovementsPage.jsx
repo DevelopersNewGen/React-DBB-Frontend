@@ -5,6 +5,7 @@ import { TopMovementsTable } from "../../components/movemnts/TopMovementsTable.j
 import { useUser } from "../../shared/hooks/useUser.jsx";
 import { ButtonGroup, Button } from "@mui/material";
 import { useTopMovements } from '../../shared/hooks/useTopMovements.jsx';
+import {RecentmovmentsTable} from '../../components/movemnts/RecentmovmentsTable.jsx';
 
 
 export const MovementsPage = () => {
@@ -28,13 +29,15 @@ export const MovementsPage = () => {
                         variant={view === "top" ? "contained" : "outlined"}
                         onClick={() => setView("top")}
                     >
-                        Top Movimientos
+                        {role === "ADMIN_ROLE" ? "Top Movimientos" : "Movimientos recientes"}                    
                     </Button>
                 </ButtonGroup>
                 {view === "movements" ? (
                     <MovementsTable role={role} />
                 ) : (
-                    <TopMovementsTable topAccounts={topAccounts} />
+                    role === "ADMIN_ROLE"
+                        ? <TopMovementsTable topAccounts={topAccounts} />
+                        : <RecentmovmentsTable/>
                 )}
             </div>
         </div>

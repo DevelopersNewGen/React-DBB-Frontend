@@ -160,9 +160,9 @@ export const makeTransfer = async (originAccount, transferData) => {
   }
 };
 
-export const getMyRecentMovements = async (aid) => {
+export const getMyRecentMovements = async (accountNumber) => {
   try {
-    return await apiClient.get(`/movement/recent/${aid}`);
+    return await apiClient.get(`/movement/recent/${accountNumber}`);
   } catch (e) {
     return { error: true, e };
   }

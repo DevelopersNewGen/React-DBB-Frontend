@@ -17,6 +17,7 @@ const routes = [
   { path: "/depositar", element: <MakeDepositPage /> },
   { path: "/*", element: <DashboardPage /> },
   { path: "/retirar", element: <MakeWithdrawalPage /> },
+  { path: "/movimientos/:accountId", element: <MovementsPage /> },
   { path: "/movimientos", element: <MovementsPage /> }
 ];
 
