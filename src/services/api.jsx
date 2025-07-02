@@ -124,3 +124,25 @@ export const addFavoriteAccount = async ({ accountNumber, alias }) => {
     return { error: true, e };
   }
 };
+
+
+// Products
+export const createProduct = async (formData) => {
+    try {
+        return await apiClient.post('/products/add', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+    } catch (e) {
+        return { error: true, e };
+    }
+};
+
+export const getAllProducts = async () => {
+    try {
+        return await apiClient.get('/products/');
+    } catch (e) {
+        return { error: true, e };
+    }
+};
