@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {TextField, Button, Box, Typography, Paper, Modal, Fade,} from "@mui/material";
+import { TextField, Button, Box, Typography, Paper, Modal, Fade } from "@mui/material";
 import { CheckCircleOutline } from "@mui/icons-material";
 import { useUserAccounts } from "../../shared/hooks/useUserAccounts";
 
@@ -36,10 +36,20 @@ const TransferForm = ({ onSubmit, loading }) => {
     );
 
     if (onSubmit && selected?.accountNumber) {
-      await onSubmit({ ...form, originAccount: selected.accountNumber });
-      setShowSuccessModal(true);
-      await refetch(); 
-      setTimeout(() => setShowSuccessModal(false), 2000);
+      const result = await onSubmit({ ...form, originAccount: selected.accountNumber });
+      if (
+        result &&
+        (
+          result.success === true ||
+          result.ok === true ||
+          result.status === "success" ||
+          result.msg === "Transferencia realizada con éxito"
+        )
+      ) {
+        setShowSuccessModal(true);
+        await refetch();
+        setTimeout(() => setShowSuccessModal(false), 2000);
+      }
     }
 
     setForm({
