@@ -6,6 +6,14 @@ export const useProducts = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
+    const [form, setForm] = useState({
+        name: "",
+        category: "Product",
+        description: "",
+        img: null,
+    });
+    const [imagePreview, setImagePreview] = useState(null);
+    const [processingImage, setProcessingImage] = useState(false);
 
     const fetchProducts = async () => {
         setLoading(true);
@@ -27,12 +35,111 @@ export const useProducts = () => {
         }
     };
 
-    const handleCreateProduct = async (formData) => {
+
+    const compressImage = (file, maxWidth = 800, maxHeight = 600, quality = 0.7) => {
+        return new Promise((resolve) => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+
+            img.onload = () => {
+                let { width, height } = img;
+                
+                if (width > height) {
+                    if (width > maxWidth) {
+                        height = (height * maxWidth) / width;
+                        width = maxWidth;
+                    }
+                } else {
+                    if (height > maxHeight) {
+                        width = (width * maxHeight) / height;
+                        height = maxHeight;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height);
+                canvas.toBlob(resolve, 'image/jpeg', quality);
+            };
+
+            img.src = URL.createObjectURL(file);
+        });
+    };
+
+    const handleFormChange = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    const handleFileChange = async (e) => {
+        const file = e.target.files[0];
+        
+        if (!file) {
+            setForm({ ...form, img: null });
+            setImagePreview(null);
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            alert('La imagen es demasiado grande. Máximo 5MB.');
+            return;
+        }
+
+        setProcessingImage(true);
+
+        try {
+            let processedFile = file;
+            
+            if (file.size > 500 * 1024) {
+                console.log('Comprimiendo imagen...', file.size, 'bytes');
+                processedFile = await compressImage(file);
+                console.log('Imagen comprimida:', processedFile.size, 'bytes');
+            }
+
+            setForm({ ...form, img: processedFile });
+
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreview(reader.result);
+                setProcessingImage(false);
+            };
+            reader.readAsDataURL(processedFile);
+
+        } catch (error) {
+            console.error('Error procesando imagen:', error);
+            alert('Error al procesar la imagen');
+            setProcessingImage(false);
+        }
+    };
+
+    const resetForm = () => {
+        setForm({
+            name: "",
+            category: "Product",
+            description: "",
+            img: null,
+        });
+        setImagePreview(null);
+        setProcessingImage(false);
+    };
+
+    // Crear producto
+    const handleCreateProduct = async () => {
         setLoading(true);
         setError(null);
         setSuccess(null);
         
         try {
+            const formData = new FormData();
+            formData.append("name", form.name.trim());
+            formData.append("category", form.category);
+            formData.append("description", form.description.trim());
+            
+            if (form.img) {
+                formData.append("img", form.img);
+                console.log('Enviando imagen de tamaño:', form.img.size, 'bytes');
+            }
+
             const response = await createProduct(formData);
             
             if (response.error) {
@@ -44,6 +151,7 @@ export const useProducts = () => {
             } else {
                 setSuccess('Producto creado exitosamente');
                 await fetchProducts();
+                resetForm();
                 return response.data;
             }
         } catch (err) {
@@ -65,12 +173,17 @@ export const useProducts = () => {
 
     return {
         products,
-        handleCreateProduct,
         loading,
         error,
         success,
-        setError,
-        setSuccess,
+        form,
+        imagePreview,
+        processingImage,
+
+        handleCreateProduct,
+        handleFormChange,
+        handleFileChange,
+        resetForm,
         resetMessages,
         fetchProducts
     };

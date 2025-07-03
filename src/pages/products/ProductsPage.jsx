@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { ResponsiveAppBar } from "../../components/Navbar.jsx";
 import { ProductAdd } from "../../components/products/ProductAdd.jsx";
 import { ProductList } from "../../components/products/ProductList.jsx";
-import { Box, Typography, Alert } from "@mui/material";
-import { useProducts } from "../../shared/hooks/useProducts.jsx";
+import { CategorySection } from "../../components/products/CategorySection.jsx";
+import { Alert } from "@mui/material";
+import { useProducts } from "../../shared/hooks";
 import { AgregarServiciosButton } from "../../components/products/AgregarServiciosButton.jsx";
+import "./ProductsPage.css";
 
 export const ProductsPage = () => {
   const { products, loading, error, success, resetMessages } = useProducts();
-
   const [open, setOpen] = useState(false);
 
   const handleProductCreated = () => {
@@ -22,10 +23,10 @@ export const ProductsPage = () => {
       const userStr = localStorage.getItem("user");
       if (userStr) {
         const user = JSON.parse(userStr);
-        if (user.username && user.username.toLowerCase().includes('admin')) {
-          return 'ADMIN_ROLE';
+        if (user.username && user.username.toLowerCase().includes("admin")) {
+          return "ADMIN_ROLE";
         }
-        return 'USER_ROLE';
+        return "USER_ROLE";
       }
       return null;
     } catch (error) {
@@ -39,33 +40,40 @@ export const ProductsPage = () => {
   return (
     <>
       <ResponsiveAppBar />
-      <Box sx={{ padding: 3, marginTop: 10 }}>
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
-          <Typography variant="h4" component="h1">
-            Gestión de Productos
-          </Typography>
-
+      <div className="products-page-container">
+        <div className="products-header">
+          <h1 className="products-title">Gestión de Productos</h1>
           <AgregarServiciosButton role={role} onClick={() => setOpen(true)} />
-        </Box>
+        </div>
 
         {error && (
-          <Alert severity="error" sx={{ mb: 2 }} onClose={resetMessages}>
-            {typeof error === "string" ? error : "Error al cargar productos"}
-          </Alert>
+          <div className="alert-container">
+            <Alert severity="error" onClose={resetMessages}>
+              {typeof error === "string" ? error : "Error al cargar productos"}
+            </Alert>
+          </div>
         )}
 
         {success && (
-          <Alert severity="success" sx={{ mb: 2 }} onClose={resetMessages}>
-            {success}
-          </Alert>
+          <div className="alert-container">
+            <Alert severity="success" onClose={resetMessages}>
+              {success}
+            </Alert>
+          </div>
         )}
 
-        <ProductAdd onProductCreated={handleProductCreated} open={open} setOpen={setOpen} />
+        <CategorySection />
 
-        <Box sx={{ mt: 4 }}>
+        <ProductAdd
+          onProductCreated={handleProductCreated}
+          open={open}
+          setOpen={setOpen}
+        />
+
+        <div className="products-grid">
           <ProductList products={products} loading={loading} />
-        </Box>
-      </Box>
+        </div>
+      </div>
     </>
   );
 };
