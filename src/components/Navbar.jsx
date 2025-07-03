@@ -24,7 +24,6 @@ import GroupIcon from '@mui/icons-material/Group';
 import '../assets/navbar.css';
 
 const pagesAdmin = [
-  { name: 'Transferir', path: '/transferir', icon: <SwapHorizIcon sx={{ mr: 1 }} /> },
   { name: 'movimientos', path: '/movimientos', icon: <PaidIcon sx={{ mr: 1 }} /> },
   { name: 'Cuentas', path: '/cuentas', icon: <AccountBalanceIcon sx={{ mr: 1 }} /> },
   { name: 'Servicios', path: '/servicios', icon: <ReceiptLongIcon sx={{ mr: 1 }} /> },
