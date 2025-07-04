@@ -32,9 +32,6 @@ export const useExchange = () => {
       } else if (operation === 'vende') {
         adjustedAmount = amount*rate - (amount *rate * 0.03); 
       }
-      console.log(rate)
-      console.log(adjustedAmount)
-      console.log(operation)
       setNetAmount(adjustedAmount); 
   
     } catch (e) {
