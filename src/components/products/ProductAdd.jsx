@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useProducts } from "../../shared/hooks";
 
 export const ProductAdd = ({ onProductCreated, open, setOpen }) => {

@@ -146,3 +146,27 @@ export const getAllProducts = async () => {
         return { error: true, e };
     }
 };
+
+export const getProductById = async (id) => {
+    try {
+        return await apiClient.get(`/products/${id}`);
+    } catch (e) {
+        return { error: true, e };
+    }
+};
+
+export const updateProduct = async (id, productData) => {
+    try {
+        return await apiClient.put(`/products/update/${id}`, productData);
+    } catch (e) {
+        return { error: true, e };
+    }
+};
+
+export const deleteProduct = async (id) => {
+    try {
+        return await apiClient.delete(`/products/delete/${id}`);
+    } catch (e) {
+        return { error: true, e };
+    }
+};

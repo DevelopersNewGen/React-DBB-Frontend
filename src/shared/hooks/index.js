@@ -11,3 +11,5 @@ export { useUserPassword } from "./useUserPassword.jsx";
 export { useUserUpdate } from "./useUserUpdate.jsx";
 export { useProducts } from "./useProducts.jsx";
 export { useFavorite } from "./useFavorite.jsx";
+export { useProductDetails } from "./useProductDetails.jsx";
+export { useProductActions } from "./useProductActions.jsx";

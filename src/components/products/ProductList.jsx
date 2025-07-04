@@ -2,7 +2,7 @@ import React from 'react';
 import { CircularProgress } from '@mui/material';
 import { ProductCard } from './ProductCard.jsx';
 
-export const ProductList = ({ products, loading }) => {
+export const ProductList = ({ products, loading, onProductClick }) => {
   if (loading) {
     return (
       <div className="loading-container">
@@ -26,7 +26,10 @@ export const ProductList = ({ products, loading }) => {
     <>
       {products.map((product) => (
         <div key={product.uid || product._id}>
-          <ProductCard product={product} />
+          <ProductCard 
+            product={product} 
+            onProductClick={onProductClick}
+          />
         </div>
       ))}
     </>

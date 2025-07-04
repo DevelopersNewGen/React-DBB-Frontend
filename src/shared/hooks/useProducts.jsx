@@ -35,7 +35,6 @@ export const useProducts = () => {
         }
     };
 
-
     const compressImage = (file, maxWidth = 800, maxHeight = 600, quality = 0.7) => {
         return new Promise((resolve) => {
             const canvas = document.createElement('canvas');
@@ -91,9 +90,7 @@ export const useProducts = () => {
             let processedFile = file;
             
             if (file.size > 500 * 1024) {
-                console.log('Comprimiendo imagen...', file.size, 'bytes');
                 processedFile = await compressImage(file);
-                console.log('Imagen comprimida:', processedFile.size, 'bytes');
             }
 
             setForm({ ...form, img: processedFile });
@@ -123,7 +120,6 @@ export const useProducts = () => {
         setProcessingImage(false);
     };
 
-    // Crear producto
     const handleCreateProduct = async () => {
         setLoading(true);
         setError(null);
@@ -136,8 +132,7 @@ export const useProducts = () => {
             formData.append("description", form.description.trim());
             
             if (form.img) {
-                formData.append("img", form.img);
-                console.log('Enviando imagen de tamaño:', form.img.size, 'bytes');
+                formData.append("img", form.img)
             }
 
             const response = await createProduct(formData);
@@ -150,7 +145,8 @@ export const useProducts = () => {
                 return false;
             } else {
                 setSuccess('Producto creado exitosamente');
-                await fetchProducts();
+                setProducts((prevProducts) => [...prevProducts, response.data]); 
+                
                 resetForm();
                 return response.data;
             }
@@ -160,6 +156,12 @@ export const useProducts = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const removeProductFromState = (productId) => {
+        setProducts((prevProducts) => 
+            prevProducts.filter(product => product._id !== productId)
+        );
     };
 
     const resetMessages = () => {
@@ -179,12 +181,12 @@ export const useProducts = () => {
         form,
         imagePreview,
         processingImage,
-
         handleCreateProduct,
         handleFormChange,
         handleFileChange,
         resetForm,
         resetMessages,
-        fetchProducts
+        fetchProducts,
+        removeProductFromState
     };
 };
