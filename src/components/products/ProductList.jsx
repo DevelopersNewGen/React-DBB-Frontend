@@ -5,22 +5,12 @@ import { ProductCard } from './ProductCard.jsx';
 export const ProductList = ({ products, loading, onProductClick }) => {
   if (loading) {
     return (
-      <div className="loading-container">
+      <div className="loading-container flex justify-center items-center min-h-screen">
         <CircularProgress />
       </div>
     );
   }
 
-  if (!products || products.length === 0) {
-    return (
-      <div className="no-products-container">
-        <h2 className="no-products-title">No hay productos disponibles</h2>
-        <p className="no-products-subtitle">
-          Crea tu primer producto usando el botón "Crear Producto"
-        </p>
-      </div>
-    );
-  }
 
   return (
     <>

@@ -69,12 +69,13 @@ export const useProductActions = (productId) => {
   };
 
   const confirmDelete = async () => {
-    const result = await handleDeleteProduct();
-    if (result.success) {
-      setDeleteDialogOpen(false);
-    }
-    return result;
-  };
+  const result = await handleDeleteProduct();
+  if (result.success) {
+    setDeleteDialogOpen(false);
+    window.location.reload();
+  }
+  return result;
+};
 
   const closeDeleteDialog = () => {
     setDeleteDialogOpen(false);

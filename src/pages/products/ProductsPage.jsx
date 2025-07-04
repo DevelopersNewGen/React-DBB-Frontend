@@ -73,7 +73,6 @@ export const ProductsPage = () => {
       <div className="products-page-container">
         <div className="products-header">
           <h1 className="products-title">Gestión de Productos</h1>
-          <AgregarServiciosButton role={role} onClick={() => setOpen(true)} />
         </div>
 
         {error && (
@@ -93,6 +92,10 @@ export const ProductsPage = () => {
         )}
 
         <CategorySection />
+
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '24px' }}>
+          <AgregarServiciosButton role={role} onClick={() => setOpen(true)} />
+        </div>
 
         <ProductAdd
           onProductCreated={handleProductCreated}  

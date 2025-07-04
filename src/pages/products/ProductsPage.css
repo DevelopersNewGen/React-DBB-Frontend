@@ -541,7 +541,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 200px;
+  min-height: 100vh;
   flex-direction: column;
   text-align: center;
 }
@@ -560,7 +560,6 @@
 @media (max-width: 768px) {
   .products-page-container {
     padding: 16px;
-    margin-top: 70px;
   }
   
   .products-header {
