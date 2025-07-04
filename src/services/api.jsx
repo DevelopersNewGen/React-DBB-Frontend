@@ -223,3 +223,11 @@ export const getUserMovements = async (page = 0, rowsPerPage = 10) => {
     return { error: true, e };
   }
 }
+
+export const getMovementById = async (mid) => {
+  try {
+    return await apiClient.get(`/movement/${mid}`);
+  } catch (e) {
+    return { error: true, e };
+  }
+};

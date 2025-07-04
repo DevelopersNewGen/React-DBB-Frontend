@@ -7,6 +7,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useMovements } from "../../shared/hooks/useMovements";
 import { MovementActionsDialog } from "./MovementsActionsForm.jsx";
 import { useMovementsActions } from "../../shared/hooks/useMovementsActions.jsx";
+import { useNavigate } from "react-router-dom";
 
 const statusColors = {
     REVERTED: "error",
@@ -31,6 +32,8 @@ export const MovementsTable = ({role}) => {
     const [successMsg, setSuccessMsg] = useState("");
     const [errorMsg, setErrorMsg] = useState("");
 
+    const navigate = useNavigate();
+
     const filteredMovements = useMemo(() => {
         const s = search.toLowerCase();
         return response.filter((mov) =>
@@ -54,7 +57,11 @@ export const MovementsTable = ({role}) => {
         );
     }, [response, search]);
 
+    // Cambiado: primero navega, luego abre el diálogo
     const handleActionClick = (movement) => {
+        if (movement && movement._id) {
+            navigate(`/movements/${movement._id}`);
+        }
         setSelectedMovement(movement);
         setDialogOpen(true);
     };
@@ -65,42 +72,42 @@ export const MovementsTable = ({role}) => {
     };
 
     const handleUpdate = async (newAmount) => {
-    const accountNumber = selectedMovement?.destinationAccount?.accountNumber;
-    
-    if (!accountNumber) {
-        setErrorMsg("No se encontró el número de cuenta para este movimiento.");
+        const accountNumber = selectedMovement?.destinationAccount?.accountNumber;
+        
+        if (!accountNumber) {
+            setErrorMsg("No se encontró el número de cuenta para este movimiento.");
+            handleDialogClose();
+            return;
+        }
+
+        const res = await updateMovement(accountNumber, Number(newAmount));
+        if (res && !actionError) {
+            setSuccessMsg("Movimiento actualizado correctamente");
+            await refetch();
+        } else {
+            setErrorMsg("Error al actualizar el movimiento");
+        }
         handleDialogClose();
-        return;
-    }
+    };
 
-    const res = await updateMovement(accountNumber, Number(newAmount));
-    if (res && !actionError) {
-        setSuccessMsg("Movimiento actualizado correctamente");
-        await refetch();
-    } else {
-        setErrorMsg("Error al actualizar el movimiento");
-    }
-    handleDialogClose();
-};
+    const handleRevert = async () => {
+        const accountNumber = selectedMovement?.destinationAccount?.accountNumber;
+        
+        if (!accountNumber) {
+            setErrorMsg("No se encontró el número de cuenta para este movimiento.");
+            handleDialogClose();
+            return;
+        }
 
-const handleRevert = async () => {
-    const accountNumber = selectedMovement?.destinationAccount?.accountNumber;
-    
-    if (!accountNumber) {
-        setErrorMsg("No se encontró el número de cuenta para este movimiento.");
+        const res = await revertMovement(accountNumber);
+        if (res && !actionError) {
+            setSuccessMsg("Movimiento revertido correctamente");
+            await refetch();
+        } else {
+            setErrorMsg("Error al revertir el movimiento");
+        }
         handleDialogClose();
-        return;
-    }
-
-    const res = await revertMovement(accountNumber);
-    if (res && !actionError) {
-        setSuccessMsg("Movimiento revertido correctamente");
-        await refetch();
-    } else {
-        setErrorMsg("Error al revertir el movimiento");
-    }
-    handleDialogClose();
-};
+    };
 
     return (
         <Paper sx={{ width: "100%", overflowX: "auto" }}>
