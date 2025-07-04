@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Grid,
@@ -13,54 +13,70 @@ import {
   Typography,
 } from "@mui/material";
 import { useExchange } from "../../shared/hooks/useExchanges";
-import "../../assets/exchange.css"
+import "../../assets/exchange.css";
+
 const currencyOptions = [
   { code: "USD", label: "USD - Dólar estadounidense" },
+  { code: "EUR", label: "EUR - Euro" },
+  { code: "GBP", label: "GBP - Libra esterlina" },
   { code: "GTQ", label: "GTQ - Quetzal" },
 ];
 
 export const ExchangeCalculator = () => {
   const [operation, setOperation] = useState("compra");
-  const [fromCurrency, setFromCurrency] = useState("USD");
-  const [toCurrency, setToCurrency] = useState("GTQ");
-  const [amount, setAmount] = useState(80);
+  const [amount, setAmount] = useState("");
+  const [fromCurrencySelected, setFromCurrencySelected] = useState("USD");
+  const [toCurrencySelected, setToCurrencySelected] = useState("USD");
+  const [lastCalculation, setLastCalculation] = useState(null);
+  const fromCurrency = operation === "compra" ? fromCurrencySelected : "GTQ";
+  const toCurrency = operation === "compra" ? "GTQ" : toCurrencySelected;
 
   const {
     conversionRate,
-    conversionAmount,
     netAmount,
     isLoading,
     error,
     convert,
   } = useExchange();
 
-  useEffect(() => {
-    if (operation === "compra") {
-      setFromCurrency("USD");
-      setToCurrency("GTQ");
-    } else {
-      setFromCurrency("GTQ");
-      setToCurrency("USD");
-    }
-  }, [operation]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    convert({ from: fromCurrency, to: toCurrency, amount });
+    const numericAmount = parseFloat(amount);
+    if (isNaN(numericAmount) || numericAmount <= 0) {
+      return;
+    }
+    const calculationData = {
+      operation,
+      fromCurrency,
+      toCurrency,
+      amount: numericAmount
+    };
+    setLastCalculation(calculationData);
+    
+    convert({ 
+      from: fromCurrency, 
+      to: toCurrency, 
+      amount: numericAmount,
+      operation
+    });
   };
 
   return (
     <Box className="exchange-container">
       <Box className="exchange-header">
         <Box className="exchange-rate-box">
-          <Typography className="exchange-rate-title">Bi Compra</Typography>
-          <Typography>Tengo USD y banco me da GTQ</Typography>
-          <Typography className="exchange-rate-value">1 USD = 7.49 GTQ</Typography>
+          <Typography className="exchange-rate-title">DBB Compra</Typography>
+          <Typography>Tengo USD, EUR o GBP y banco me da GTQ</Typography>
+          <Typography className="exchange-rate-value">1 USD = 7.46 GTQ</Typography>
+          <Typography className="exchange-rate-value">1 EUR = 8.79 GTQ</Typography>
+          <Typography className="exchange-rate-value">1 GBP = 10.18 GTQ</Typography>
         </Box>
         <Box className="exchange-rate-box">
-          <Typography className="exchange-rate-title">Bi Vende</Typography>
-          <Typography>Tengo GTQ y banco me da USD</Typography>
-          <Typography className="exchange-rate-value">1 USD = 7.83 GTQ</Typography>
+          <Typography className="exchange-rate-title">DBB Vende</Typography>
+          <Typography>Tengo GTQ y banco me da USD, EUR o GBP</Typography>
+          <Typography className="exchange-rate-value">1 GTQ = 0.13 USD</Typography>
+          <Typography className="exchange-rate-value">1 GTQ = 0.11 EUR</Typography>
+          <Typography className="exchange-rate-value">1 GTQ = 0.09 GBP</Typography>
         </Box>
       </Box>
 
@@ -75,10 +91,10 @@ export const ExchangeCalculator = () => {
         className="toggle-group"
       >
         <ToggleButton value="compra" className="toggle-button">
-          Bi Compra
+          DBB Compra
         </ToggleButton>
         <ToggleButton value="vende" className="toggle-button">
-          Bi Vende
+          DBB Vende
         </ToggleButton>
       </ToggleButtonGroup>
 
@@ -90,8 +106,9 @@ export const ExchangeCalculator = () => {
               type="number"
               fullWidth
               value={amount}
-              onChange={(e) => setAmount(Number(e.target.value))}
+              onChange={(e) => setAmount(e.target.value)}
               className="amount-input"
+              required
             />
           </Grid>
 
@@ -101,13 +118,20 @@ export const ExchangeCalculator = () => {
               <Select
                 value={fromCurrency}
                 label="De"
-                onChange={(e) => setFromCurrency(e.target.value)}
+                disabled={operation === "vende"}
+                onChange={(e) => operation === "compra" && setFromCurrencySelected(e.target.value)}
               >
-                {currencyOptions.map((opt) => (
-                  <MenuItem key={opt.code} value={opt.code}>
-                    {opt.label}
+                {operation === "compra" ? (
+                  currencyOptions.filter(opt => opt.code !== "GTQ").map(option => (
+                    <MenuItem key={option.code} value={option.code}>
+                      {option.label}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem value={fromCurrency}>
+                    {currencyOptions.find(opt => opt.code === fromCurrency)?.label}
                   </MenuItem>
-                ))}
+                )}
               </Select>
             </FormControl>
           </Grid>
@@ -122,13 +146,20 @@ export const ExchangeCalculator = () => {
               <Select
                 value={toCurrency}
                 label="A"
-                onChange={(e) => setToCurrency(e.target.value)}
+                disabled={operation === "compra"}
+                onChange={(e) => operation === "vende" && setToCurrencySelected(e.target.value)}
               >
-                {currencyOptions.map((opt) => (
-                  <MenuItem key={opt.code} value={opt.code}>
-                    {opt.label}
+                {operation === "vende" ? (
+                  currencyOptions.filter(opt => opt.code !== "GTQ").map(option => (
+                    <MenuItem key={option.code} value={option.code}>
+                      {option.label}
+                    </MenuItem>
+                  ))
+                ) : (
+                  <MenuItem value={toCurrency}>
+                    {currencyOptions.find(opt => opt.code === toCurrency)?.label}
                   </MenuItem>
-                ))}
+                )}
               </Select>
             </FormControl>
           </Grid>
@@ -137,8 +168,9 @@ export const ExchangeCalculator = () => {
             <Button
               type="submit"
               variant="contained"
-              disabled={isLoading}
+              disabled={isLoading || !amount || parseFloat(amount) <= 0}
               className="calculate-button"
+              fullWidth
             >
               {isLoading ? "Calculando…" : "Calcular"}
             </Button>
@@ -146,11 +178,11 @@ export const ExchangeCalculator = () => {
         </Grid>
       </form>
 
-      {conversionRate != null && (
-        <Box className="result-box">
+      {conversionRate !== null && netAmount !== null && lastCalculation && (
+        <Box className="result-box" mt={3}>
           <Typography className="result-title">Resultado:</Typography>
           <Typography className="result-value">
-            {amount} {fromCurrency} = {netAmount.toFixed(2)} {toCurrency}
+            {lastCalculation.amount} {lastCalculation.fromCurrency} = {netAmount.toFixed(2)} {lastCalculation.toCurrency}
           </Typography>
         </Box>
       )}
@@ -160,6 +192,16 @@ export const ExchangeCalculator = () => {
           {error}
         </Typography>
       )}
+
+      <Typography 
+        variant="body2" 
+        color="text.secondary" 
+        mt={3} 
+        textAlign="center"
+        sx={{ fontStyle: 'italic' }}
+      >
+        * Tenemos una comisión del 3% por cada cambio de divisa
+      </Typography>
     </Box>
   );
 };
