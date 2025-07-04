@@ -31,7 +31,7 @@ export const MovementsTable = ({role}) => {
 
     return (
         <Paper sx={{ width: "100%", overflowX: "auto" }}>
-            <Box sx={{ p: 2, minWidth: 1200 }}>
+            <Box sx={{ p: 2 }}>
                 <TextField
                     label="Buscar"
                     variant="outlined"
@@ -44,7 +44,7 @@ export const MovementsTable = ({role}) => {
                     size="small"
                 />
             </Box>
-            <TableContainer sx={{ minWidth: 1200 }}>
+            <TableContainer>
                 <Table>
                     <TableHead>
                         <TableRow>
