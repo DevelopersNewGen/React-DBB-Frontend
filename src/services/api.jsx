@@ -146,3 +146,12 @@ export const getAllProducts = async () => {
         return { error: true, e };
     }
 };
+
+//Exchanges
+export const getExchanges = async (formData) => {
+    try {
+        return await apiClient.post('/exchange/', formData);
+    } catch (e) {
+        return { error: true, e };
+    }
+}
