@@ -5,11 +5,11 @@ export function useMovementsActions() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const updateMovement = async (mid, newAmount) => {
+    const updateMovement = async (accountNumber, newAmount) => {
         setLoading(true);
         setError(null);
         try {
-            const res = await updateDepositAmount(mid, { newAmount });
+            const res = await updateDepositAmount(accountNumber, { newAmount });
             setLoading(false);
             return res.data;
         } catch (e) {
@@ -19,11 +19,11 @@ export function useMovementsActions() {
         }
     };
 
-    const revertMovement = async (mid) => {
+    const revertMovement = async (accountNumber) => {
         setLoading(true);
         setError(null);
         try {
-            const res = await revertDepositAmount(mid, {});
+            const res = await revertDepositAmount(accountNumber);
             setLoading(false);
             return res.data;
         } catch (e) {

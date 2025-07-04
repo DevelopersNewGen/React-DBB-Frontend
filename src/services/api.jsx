@@ -144,19 +144,23 @@ export const makeDeposit = async (depositData) => {
   }
 };
 
-export const updateDepositAmount = async (mid, updateData) => {
+export const updateDepositAmount = async (accountNumber, updateData) => {
   try {
-    return await apiClient.patch(`/movement/deposit/${mid}`, updateData);
+    const res = await apiClient.patch(`/movement/deposit/${accountNumber}`, updateData);
+    return res;
   } catch (e) {
-    return { error: true, e };
+    console.error("Error updating deposit:", e);
+    return { error: true, message: e.response ? e.response.data.msg : e.message };
   }
 };
 
-export const revertDepositAmount = async (mid, revertData) => {
+export const revertDepositAmount = async (accountNumber) => {
   try {
-    return await apiClient.delete(`/movement/deposit/${mid}`, { data: revertData });
+    const res = await apiClient.delete(`/movement/deposit/${accountNumber}`);
+    return res;
   } catch (e) {
-    return { error: true, e };
+    console.error("Error reverting deposit:", e);
+    return { error: true, message: e.response ? e.response.data.msg : e.message };
   }
 };
 

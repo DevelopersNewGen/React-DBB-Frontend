@@ -1,9 +1,12 @@
 import React, { useState, useMemo } from "react";
 import {
     Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Chip,
-    TablePagination, TextField, Box
+    TablePagination, TextField, Box, IconButton, Tooltip, Snackbar, Alert
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import { useMovements } from "../../shared/hooks/useMovements";
+import { MovementActionsDialog } from "./MovementsActionsForm.jsx";
+import { useMovementsActions } from "../../shared/hooks/useMovementsActions.jsx";
 
 const statusColors = {
     REVERTED: "error",
@@ -18,8 +21,15 @@ const typeColors = {
 };
 
 export const MovementsTable = ({role}) => {
-    const { response, page, setPage, rowsPerPage, setRowsPerPage, total, loading } = useMovements(role);
+    const { response, page, setPage, rowsPerPage, setRowsPerPage, total, loading, refetch } = useMovements(role);
     const [search, setSearch] = useState("");
+
+    const { updateMovement, revertMovement, loading: actionLoading, error: actionError } = useMovementsActions();
+    const [selectedMovement, setSelectedMovement] = useState(null);
+    const [dialogOpen, setDialogOpen] = useState(false);
+
+    const [successMsg, setSuccessMsg] = useState("");
+    const [errorMsg, setErrorMsg] = useState("");
 
     const filteredMovements = useMemo(() => {
         const s = search.toLowerCase();
@@ -44,9 +54,57 @@ export const MovementsTable = ({role}) => {
         );
     }, [response, search]);
 
+    const handleActionClick = (movement) => {
+        setSelectedMovement(movement);
+        setDialogOpen(true);
+    };
+
+    const handleDialogClose = () => {
+        setDialogOpen(false);
+        setSelectedMovement(null);
+    };
+
+    const handleUpdate = async (newAmount) => {
+    const accountNumber = selectedMovement?.destinationAccount?.accountNumber;
+    
+    if (!accountNumber) {
+        setErrorMsg("No se encontró el número de cuenta para este movimiento.");
+        handleDialogClose();
+        return;
+    }
+
+    const res = await updateMovement(accountNumber, Number(newAmount));
+    if (res && !actionError) {
+        setSuccessMsg("Movimiento actualizado correctamente");
+        await refetch();
+    } else {
+        setErrorMsg("Error al actualizar el movimiento");
+    }
+    handleDialogClose();
+};
+
+const handleRevert = async () => {
+    const accountNumber = selectedMovement?.destinationAccount?.accountNumber;
+    
+    if (!accountNumber) {
+        setErrorMsg("No se encontró el número de cuenta para este movimiento.");
+        handleDialogClose();
+        return;
+    }
+
+    const res = await revertMovement(accountNumber);
+    if (res && !actionError) {
+        setSuccessMsg("Movimiento revertido correctamente");
+        await refetch();
+    } else {
+        setErrorMsg("Error al revertir el movimiento");
+    }
+    handleDialogClose();
+};
+
     return (
-        <Paper>
-            <Box sx={{ p: 2 }}>
+        <Paper sx={{ width: "100%", overflowX: "auto" }}>
+            <Box sx={{ p: 2, minWidth: 1200 }}>
                 <TextField
                     label="Buscar"
                     variant="outlined"
@@ -59,7 +117,7 @@ export const MovementsTable = ({role}) => {
                     size="small"
                 />
             </Box>
-            <TableContainer>
+            <TableContainer sx={{ minWidth: 1200 }}>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -71,18 +129,19 @@ export const MovementsTable = ({role}) => {
                             <TableCell>Cuenta Destino</TableCell>
                             <TableCell>Estatus</TableCell>
                             <TableCell>Fecha</TableCell>
+                            <TableCell>Acciones</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {loading ? (
                             <TableRow>
-                                <TableCell colSpan={8} align="center">
+                                <TableCell colSpan={9} align="center">
                                     Cargando...
                                 </TableCell>
                             </TableRow>
                         ) : filteredMovements.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={8} align="center">
+                                <TableCell colSpan={9} align="center">
                                     No hay movimientos para mostrar.
                                 </TableCell>
                             </TableRow>
@@ -115,6 +174,20 @@ export const MovementsTable = ({role}) => {
                                     <TableCell>
                                         {mov.date ? new Date(mov.date).toLocaleString() : "-"}
                                     </TableCell>
+                                    <TableCell>
+                                        {role === "ADMIN_ROLE" && mov.type === "DEPOSIT" && mov.status !== "REVERTED" && (
+                                            <Tooltip title="Actualizar/Revertir">
+                                                <span>
+                                                    <IconButton
+                                                        size="small"
+                                                        onClick={() => handleActionClick(mov)}
+                                                    >
+                                                        <EditIcon />
+                                                    </IconButton>
+                                                </span>
+                                            </Tooltip>
+                                        )}
+                                    </TableCell>
                                 </TableRow>
                             ))
                         )}
@@ -134,6 +207,35 @@ export const MovementsTable = ({role}) => {
                 rowsPerPageOptions={[5, 10, 25, 50]}
                 labelRowsPerPage="Filas por página"
             />
+            <MovementActionsDialog
+                open={dialogOpen}
+                onClose={handleDialogClose}
+                movement={selectedMovement}
+                onUpdate={handleUpdate}
+                onRevert={handleRevert}
+                loading={actionLoading}
+                error={actionError}
+            />
+            <Snackbar
+                open={!!successMsg}
+                autoHideDuration={3000}
+                onClose={() => setSuccessMsg("")}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            >
+                <Alert onClose={() => setSuccessMsg("")} severity="success" sx={{ width: '100%' }}>
+                    {successMsg}
+                </Alert>
+            </Snackbar>
+            <Snackbar
+                open={!!errorMsg}
+                autoHideDuration={3000}
+                onClose={() => setErrorMsg("")}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            >
+                <Alert onClose={() => setErrorMsg("")} severity="error" sx={{ width: '100%' }}>
+                    {errorMsg}
+                </Alert>
+            </Snackbar>
         </Paper>
     );
 };
