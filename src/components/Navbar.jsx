@@ -44,7 +44,7 @@ const settings = [
 ];
 
 export const ResponsiveAppBar = () => {
-  const { user, role, isLoading } = useUser(); 
+  const { user, role, isLoading, getUser } = useUser(); 
   const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();

@@ -124,3 +124,29 @@ export const addFavoriteAccount = async ({ accountNumber, alias }) => {
     return { error: true, e };
   }
 };
+
+//Account
+
+export const getAccountsByUser = async (userId) => {
+  try {
+    return await apiClient.get(`/accounts/user/${userId}`);
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const getAccounts = async () => {
+  try {
+    return await apiClient.get("/accounts/listAccounts");
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const createAccount = async (userId, accountData) => {
+  try {
+    return await apiClient.post(`/accounts/createAccount/${userId}`, accountData);
+  } catch (e) {
+    throw e;
+  }
+};

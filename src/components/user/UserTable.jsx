@@ -4,6 +4,7 @@ import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { UserEditRole } from "./UserEditRole";
 import { useUserUpdateRole } from "../../shared/hooks";
+import { useNavigate } from "react-router-dom";
 
 export const UserTable = ({
   users,
@@ -16,12 +17,10 @@ export const UserTable = ({
 }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [menuRow, setMenuRow] = React.useState(null);
-
-  
   const [roleModalOpen, setRoleModalOpen] = React.useState(false);
   const [selectedUser, setSelectedUser] = React.useState(null);
-
   const { changeUserRole, loading: changingRole } = useUserUpdateRole();
+  const navigate = useNavigate();
 
   const handleMenuOpen = (event, row) => {
     setAnchorEl(event.currentTarget);
@@ -48,9 +47,15 @@ export const UserTable = ({
     const ok = await changeUserRole(uid, newRole);
     if (ok) {
       handleCloseRoleModal();
-      
       window.location.reload();
     }
+  };
+
+  const handleCreateAccount = () => {
+    if (menuRow?.uid) {
+      navigate(`/create-account/${menuRow.uid}`);
+    }
+    handleMenuClose();
   };
 
   const columns = [
@@ -109,6 +114,9 @@ export const UserTable = ({
           >
             Cuentas
           </MenuItem>
+          <MenuItem onClick={handleCreateAccount}>
+            Crear Cuenta
+          </MenuItem>
           {showEdit && [
             <MenuItem
               key="edit"
@@ -135,7 +143,6 @@ export const UserTable = ({
             >
               Eliminar
             </MenuItem>,
-            
             menuRow?.role === "CLIENT_ROLE" && (
               <MenuItem
                 key="change-role"
