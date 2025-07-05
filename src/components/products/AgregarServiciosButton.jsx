@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 export const AgregarServiciosButton = ({ role, onClick }) => {
   const [hovered, setHovered] = useState(false);
 
-  if (!role || (role !== 'ADMIN_ROLE' && role !== 'admin' && role !== 'ADMIN')) {
+  if (!role || role !== 'ADMIN_ROLE') {
     return null;
   }
 

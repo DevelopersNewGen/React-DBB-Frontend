@@ -1,32 +1,15 @@
 import { useState, useEffect } from 'react';
 import { updateProduct, deleteProduct } from '../../services/api';
+import { useUser } from './useUser';
 
 export const useProductActions = (productId) => {
   const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-
-  useEffect(() => {
-    const checkAdminRole = () => {
-      try {
-        const userDetails = localStorage.getItem("user");
-        if (userDetails) {
-          const user = JSON.parse(userDetails);
-          if (user.role) {
-            setIsAdmin(user.role === "ADMIN_ROLE");
-          } else {
-            setIsAdmin(user.username === "ADMINB");
-          }
-        }
-      } catch (error) {
-        setIsAdmin(false);
-      }
-    };
-
-    checkAdminRole();
-  }, []);
+  
+  const { role } = useUser(); 
+  const isAdmin = role === "ADMIN_ROLE"; 
 
   const handleUpdateProduct = async (productData) => {
     setLoading(true);

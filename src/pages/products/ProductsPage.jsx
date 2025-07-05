@@ -5,7 +5,7 @@ import { ProductList } from "../../components/products/ProductList.jsx";
 import { CategorySection } from "../../components/products/CategorySection.jsx";
 import { ProductDetailsModal } from "../../components/products/ProductDetailsModal.jsx";
 import { Alert } from "@mui/material";
-import { useProducts } from "../../shared/hooks";
+import { useProducts, useUser } from "../../shared/hooks";
 import { AgregarServiciosButton } from "../../components/products/AgregarServiciosButton.jsx";
 import "./ProductsPage.css";
 
@@ -19,6 +19,8 @@ export const ProductsPage = () => {
     fetchProducts,
     removeProductFromState
   } = useProducts();
+  
+  const { role } = useUser(); 
   
   const [open, setOpen] = useState(false);
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
@@ -44,24 +46,6 @@ export const ProductsPage = () => {
     setDetailsModalOpen(false);
     setSelectedProductId(null);
   };
-
-  const getUserRole = () => {
-    try {
-      const userStr = localStorage.getItem("user");
-      if (userStr) {
-        const user = JSON.parse(userStr);
-        if (user.username && user.username.toLowerCase().includes("admin")) {
-          return "ADMIN_ROLE";
-        }
-        return "USER_ROLE";
-      }
-      return null;
-    } catch (error) {
-      return null;
-    }
-  };
-
-  const role = getUserRole();
 
   useEffect(() => {
     fetchProducts();
