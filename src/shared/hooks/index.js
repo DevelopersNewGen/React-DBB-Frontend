@@ -12,3 +12,7 @@ export { useUserUpdate } from "./useUserUpdate.jsx";
 export { useUserAccounts } from "./useUserAccounts.jsx";
 export { useAdminAccounts } from "./useAdminAccounts.jsx";
 export { useAccounts } from "./useAccounts.jsx";
+export { useProducts } from "./useProducts.jsx";
+export { useFavorite } from "./useFavorite.jsx";
+export { useProductDetails } from "./useProductDetails.jsx";
+export { useProductActions } from "./useProductActions.jsx";

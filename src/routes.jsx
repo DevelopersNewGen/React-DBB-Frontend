@@ -5,10 +5,12 @@ import { UserDetailsPage } from "./pages/user/UserDetailsPage";
 import { AccountPage } from "./pages/accountPage/accountPage";
 import CreateAccountForm from "./components/account/CreateAccountForm"; 
 import  FavoritePage  from "./pages/user/FavoritePage"; 
+import { ProductsPage } from "./pages/products/ProductsPage";
 
 const routes = [
   { path: "/auth", element: <AuthPage /> },
   { path: "/clientes", element: <UserTablePage /> },
+  { path: "/servicios", element: <ProductsPage /> },
   { path: "/profile", element: <UserDetailsPage /> }, 
   { path: "/*", element: <DashboardPage /> },
   { path: "/favoritos", element: <FavoritePage /> },
