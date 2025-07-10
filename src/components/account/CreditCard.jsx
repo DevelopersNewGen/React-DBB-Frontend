@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const CreditCard = ({
   cardNumber = "8050 5040 2030 3020",
   cardHolder = "Prem Kumar Shahi",
-  validThru = "05/28",
+  validThru = "XX/XX",
   brandLogo = "/logo.png",
   chipImg = "/chip.png",
   bgColor = "#1e1e1e"
@@ -89,7 +89,7 @@ const CreditCard = ({
               wordBreak: "break-word",
             }}
           >
-            {cardNumber}
+            {"0000 0000 0000 0000"}
           </h5>
           <h5
             className="creditcard-name"
@@ -163,7 +163,7 @@ const CreditCardList = ({ accounts = [], userName = "" }) => {
             <CreditCard
               cardNumber={acc.accountNumber}
               cardHolder={userName}
-              validThru={"05/28"}
+              validThru={"XX/XX"}
               brandLogo="/logo.png"
               chipImg="/chip.png"
               bgColor={cardColor}

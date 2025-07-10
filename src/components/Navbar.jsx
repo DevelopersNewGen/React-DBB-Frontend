@@ -45,10 +45,10 @@ const settings = [
 ];
 
 export const ResponsiveAppBar = () => {
+  const { user, role, isLoading, getUser } = useUser(); 
   const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, role, isLoading } = useUser();
   const isLogged = !!user;
   const img = user?.img;
 
@@ -115,7 +115,7 @@ export const ResponsiveAppBar = () => {
             <Box sx={{ display: 'flex', alignItems: 'center', ml: 'auto' }}>
               <Typography
                 sx={{
-                  color: '#666cff',
+                  color: '#fff', 
                   fontWeight: 600,
                   marginRight: 2,
                   fontFamily: 'monospace',

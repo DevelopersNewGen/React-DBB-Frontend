@@ -2,8 +2,8 @@ import React, {useState} from "react"
 import { ResponsiveAppBar } from '../../components/Navbar.jsx';
 import "./authPage.css"
 
-import { Login } from "../../components/auth/Login"
-import { useUser } from "../../shared/hooks";
+import { Login } from "../../components/auth/Login.jsx"
+import { useUser } from "../../shared/hooks/index.js";
 
 export const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);

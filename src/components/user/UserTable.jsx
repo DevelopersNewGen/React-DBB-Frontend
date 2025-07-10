@@ -14,6 +14,7 @@ export const UserTable = ({
   onAccountsUser,
   title,
   showEdit = true,
+
 }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [menuRow, setMenuRow] = React.useState(null);
@@ -114,7 +115,9 @@ export const UserTable = ({
           >
             Cuentas
           </MenuItem>
-          <MenuItem onClick={handleCreateAccount}>Crear Cuenta</MenuItem>
+          <MenuItem onClick={handleCreateAccount}>
+            Crear Cuenta
+          </MenuItem>
           {showEdit && [
             <MenuItem
               key="edit"
@@ -142,10 +145,13 @@ export const UserTable = ({
               Eliminar
             </MenuItem>,
             menuRow?.role === "CLIENT_ROLE" && (
-              <MenuItem key="change-role" onClick={handleOpenRoleModal}>
+              <MenuItem
+                key="change-role"
+                onClick={handleOpenRoleModal}
+              >
                 Cambiar Rol
               </MenuItem>
-            ),
+            )
           ]}
         </Menu>
         <UserEditRole

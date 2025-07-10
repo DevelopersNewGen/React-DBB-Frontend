@@ -9,36 +9,29 @@ import {
   Grid,
   Alert,
 } from "@mui/material";
-import { useUserUpdateAdmin } from "../../shared/hooks";
+import { useUserUpdate } from "../../shared/hooks";
 
-export const UserEditAdmin = ({ open, onClose, user, onUserUpdated }) => {
+export const UserEdit = ({ open, onClose, user, onUserUpdated }) => {
   const [form, setForm] = useState({
-    name: "",
     username: "",
-    dpi: "",
+    email: "",
     address: "",
     cellphone: "",
-    email: "",
     jobName: "",
     monthlyIncome: "",
-    role: "",
   });
 
-  const { handleUpdateUserAdmin, loading, error, success } = useUserUpdateAdmin();
+  const { handleUpdateUser, loading, error, success } = useUserUpdate();
 
- 
   useEffect(() => {
     if (user) {
       setForm({
-        name: user.name || "",
         username: user.username || "",
-        dpi: user.dpi || "",
+        email: user.email || "",
         address: user.address || "",
         cellphone: user.cellphone || "",
-        email: user.email || "",
         jobName: user.jobName || "",
         monthlyIncome: user.monthlyIncome || "",
-        role: user.role || "",
       });
     }
   }, [user, open]);
@@ -50,7 +43,7 @@ export const UserEditAdmin = ({ open, onClose, user, onUserUpdated }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = { ...form, monthlyIncome: Number(form.monthlyIncome) };
-    const result = await handleUpdateUserAdmin(user.uid, data);
+    const result = await handleUpdateUser(data);
     if (result && onUserUpdated) {
       onUserUpdated(result);
       onClose();
@@ -69,22 +62,10 @@ export const UserEditAdmin = ({ open, onClose, user, onUserUpdated }) => {
         sx: { backgroundColor: "#f5f5f5" },
       }}
     >
-      <DialogTitle sx={{ color: darkGray }}>Editar Usuario</DialogTitle>
+      <DialogTitle sx={{ color: darkGray }}>Editar Mi Perfil</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit} id="user-edit-form">
           <Grid container spacing={2} columns={12}>
-            <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
-              <TextField
-                label="Nombre"
-                name="name"
-                value={form.name}
-                onChange={handleChange}
-                fullWidth
-                required
-                InputLabelProps={{ style: { color: darkGray } }}
-                InputProps={{ style: { color: darkGray } }}
-              />
-            </Grid>
             <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
               <TextField
                 label="Usuario"
@@ -99,12 +80,13 @@ export const UserEditAdmin = ({ open, onClose, user, onUserUpdated }) => {
             </Grid>
             <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
               <TextField
-                label="DPI"
-                name="dpi"
-                value={form.dpi}
+                label="Email"
+                name="email"
+                value={form.email}
                 onChange={handleChange}
                 fullWidth
                 required
+                type="email"
                 InputLabelProps={{ style: { color: darkGray } }}
                 InputProps={{ style: { color: darkGray } }}
               />
@@ -135,19 +117,6 @@ export const UserEditAdmin = ({ open, onClose, user, onUserUpdated }) => {
             </Grid>
             <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
               <TextField
-                label="Email"
-                name="email"
-                value={form.email}
-                onChange={handleChange}
-                fullWidth
-                required
-                type="email"
-                InputLabelProps={{ style: { color: darkGray } }}
-                InputProps={{ style: { color: darkGray } }}
-              />
-            </Grid>
-            <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
-              <TextField
                 label="Puesto"
                 name="jobName"
                 value={form.jobName}
@@ -172,15 +141,7 @@ export const UserEditAdmin = ({ open, onClose, user, onUserUpdated }) => {
               />
             </Grid>
           </Grid>
-          {error && Array.isArray(error) ? (
-            <Alert severity="error" sx={{ mt: 2 }}>
-              <ul style={{ margin: 0, paddingLeft: 18 }}>
-                {error.map((err, idx) => (
-                  <li key={idx}>{err.msg}</li>
-                ))}
-              </ul>
-            </Alert>
-          ) : error && (
+          {error && (
             <Alert severity="error" sx={{ mt: 2 }}>
               {typeof error === "string" ? error : "Error al actualizar usuario"}
             </Alert>
