@@ -36,7 +36,8 @@ const pagesUser = [
   { name: 'Transferir', path: '/transferir', icon: <SwapHorizIcon sx={{ mr: 1 }} /> },
   { name: 'Pagos', path: '/pagos', icon: <PaidIcon sx={{ mr: 1 }} /> },
   { name: 'Cuentas', path: '/cuentas', icon: <AccountBalanceIcon sx={{ mr: 1 }} /> },
-  { name: 'Servicios', path: '/servicios', icon: <ReceiptLongIcon sx={{ mr: 1 }} /> }
+  { name: 'Servicios', path: '/servicios', icon: <ReceiptLongIcon sx={{ mr: 1 }} /> },
+  { name: 'Divisas', path: '/exchange', icon: <MonetizationOnIcon sx={{ mr: 1 }} /> }
 ];
 
 const exchangePage = { 
