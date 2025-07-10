@@ -23,3 +23,4 @@ export const useAdminAccounts = () => {
 
   return { accounts, loading, error, isAdmin: true };
 };
+

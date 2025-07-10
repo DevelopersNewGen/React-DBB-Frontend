@@ -7,13 +7,11 @@ import { ResponsiveAppBar } from "../../components/Navbar.jsx";
 import { getUser } from "../../services/api";
 import { CreditCardList } from "../../components/account/CreditCard";
 import AllAccountsTable from "../../components/account/AllAccountsTable";
-import { useNavigate } from "react-router-dom";
 
 export const AccountPage = () => {
   const [userId, setUserId] = useState(null);
   const [userError, setUserError] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     getUser()
@@ -38,6 +36,8 @@ export const AccountPage = () => {
   const loading = isAdmin ? adminAccounts.loading : userAccounts.loading;
   const error = isAdmin ? adminAccounts.error : userAccounts.error;
 
+  console.log("Accounts:", accounts);
+
   return (
     <>
       <ResponsiveAppBar />
@@ -61,6 +61,7 @@ export const AccountPage = () => {
             <div className="accounts-container" style={{ marginTop: 24 }}>
               {accounts.map((acc) => (
                 <AccountTable
+                  accountId={acc.uid}
                   key={acc.accountNumber}
                   accountNumber={acc.accountNumber}
                   userName={acc.userName}

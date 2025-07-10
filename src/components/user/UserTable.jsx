@@ -13,7 +13,8 @@ export const UserTable = ({
   onDeleteUser,
   onAccountsUser,
   title,
-  showEdit = true
+  showEdit = true,
+
 }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [menuRow, setMenuRow] = React.useState(null);

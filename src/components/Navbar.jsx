@@ -24,18 +24,19 @@ import GroupIcon from '@mui/icons-material/Group';
 import '../assets/navbar.css';
 
 const pagesAdmin = [
-  { name: 'Transferir', path: '/transferir', icon: <SwapHorizIcon sx={{ mr: 1 }} /> },
-  { name: 'Pagos', path: '/pagos', icon: <PaidIcon sx={{ mr: 1 }} /> },
+  { name: 'movimientos', path: '/movimientos', icon: <PaidIcon sx={{ mr: 1 }} /> },
   { name: 'Cuentas', path: '/cuentas', icon: <AccountBalanceIcon sx={{ mr: 1 }} /> },
   { name: 'Servicios', path: '/servicios', icon: <ReceiptLongIcon sx={{ mr: 1 }} /> },
-  { name: 'Clientes', path: '/clientes', icon: <GroupIcon sx={{ mr: 1 }} /> }
+  { name: 'Clientes', path: '/clientes', icon: <GroupIcon sx={{ mr: 1 }} /> },
+  { name: 'Depositar', path: '/depositar', icon: <PaidIcon sx={{ mr: 1 }} /> },
+  { name: 'Retirar', path: '/retirar', icon: <PaidIcon sx={{ mr: 1 }} /> }
 ];
 
 const pagesUser = [
   { name: 'Transferir', path: '/transferir', icon: <SwapHorizIcon sx={{ mr: 1 }} /> },
-  { name: 'Pagos', path: '/pagos', icon: <PaidIcon sx={{ mr: 1 }} /> },
+  { name: 'movimientos', path: '/movimientos', icon: <PaidIcon sx={{ mr: 1 }} /> },
   { name: 'Cuentas', path: '/cuentas', icon: <AccountBalanceIcon sx={{ mr: 1 }} /> },
-  { name: 'Servicios', path: '/servicios', icon: <ReceiptLongIcon sx={{ mr: 1 }} /> }
+  { name: 'Servicios', path: '/servicios', icon: <ReceiptLongIcon sx={{ mr: 1 }} /> },
 ];
 
 const settings = [

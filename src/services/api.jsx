@@ -196,4 +196,100 @@ export const createAccount = async (userId, accountData) => {
     throw e;
   }
 };
+//Movements
 
+export const makeDeposit = async (depositData) => {
+  try {
+    return await apiClient.post("/movement/deposit", depositData);
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const updateDepositAmount = async (movementId, updateData) => {
+  try {
+    const res = await apiClient.patch(`/movement/deposit/${movementId}`, updateData);
+    return res;
+  } catch (e) {
+    console.error("Error updating deposit:", e);
+    return { error: true, message: e.response ? e.response.data.msg : e.message };
+  }
+};
+
+export const revertDepositAmount = async (movementId) => {
+  try {
+    const res = await apiClient.delete(`/movement/deposit/${movementId}`);
+    return res;
+  } catch (e) {
+    console.error("Error reverting deposit:", e);
+    return { error: true, message: e.response ? e.response.data.msg : e.message };
+  }
+};
+
+export const makeWithdrawal = async (withdrawalData) => {
+  try {
+    return await apiClient.post("/movement/withdrawal", withdrawalData);
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const getAccountMovements = async (aid, from = 0, limit = 10) => {
+  try {
+    return await apiClient.get(`/movement/account/${aid}?from=${from}&limit=${limit}`);
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const getTopMovements = async () => {
+  try {
+    return await apiClient.get("/movement/top");
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const makeTransfer = async (originAccount, transferData) => {
+  try {
+    return await apiClient.post(`/movement/transfer/${originAccount}`, transferData);
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const getMyRecentMovements = async (accountNumber) => {
+  try {
+    return await apiClient.get(`/movement/recent/${accountNumber}`);
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const getAllMovements = async (page = 0, rowsPerPage = 10,) => {
+  try {
+    const from = page * rowsPerPage;
+    const limit = rowsPerPage;
+    return await apiClient.get(`/movement?from=${from}&limit=${limit}`);
+  } catch (e) {
+    return { error: true, e };
+  }
+}
+
+export const getUserMovements = async (page = 0, rowsPerPage = 10) => {
+  try {
+    const from = page * rowsPerPage;
+    const limit = rowsPerPage;
+    return await apiClient.get(`/movement/user?from=${from}&limit=${limit}`);
+  } catch (e) {
+    return { error: true, e };
+  }
+}
+
+export const getMovementById = async (mid) => {
+  try {
+    return await apiClient.get(`/movement/${mid}`);
+  } catch (e) {
+    return { error: true, e };
+  }
+};
