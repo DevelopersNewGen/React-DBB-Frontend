@@ -21,6 +21,7 @@ import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import GroupIcon from '@mui/icons-material/Group';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import '../assets/navbar.css';
 
 const pagesAdmin = [
@@ -37,7 +38,15 @@ const pagesUser = [
   { name: 'movimientos', path: '/movimientos', icon: <PaidIcon sx={{ mr: 1 }} /> },
   { name: 'Cuentas', path: '/cuentas', icon: <AccountBalanceIcon sx={{ mr: 1 }} /> },
   { name: 'Servicios', path: '/servicios', icon: <ReceiptLongIcon sx={{ mr: 1 }} /> },
+  { name: 'Divisas', path: '/exchange', icon: <MonetizationOnIcon sx={{ mr: 1 }} /> },
+
 ];
+
+const exchangePage = { 
+  name: 'Divisas', 
+  path: '/exchange', 
+  icon: <MonetizationOnIcon sx={{ mr: 1 }} /> 
+};
 
 const settings = [
   { icon: MiscellaneousServicesIcon, text: 'Perfil' },
@@ -93,7 +102,15 @@ export const ResponsiveAppBar = () => {
           
           <img src="/logo.png" alt="Logo" style={{ height: 56, marginRight: 24 }} className="navbar-logo" />
 
-          
+          <Button
+            onClick={() => handlePages(exchangePage.path)}
+            className={`navbar-page-button${location.pathname === exchangePage.path ? ' active' : ''}`}
+            sx={{ my: 2, color: 'white', display: 'block', alignItems: 'center' }}
+            startIcon={exchangePage.icon}
+          >
+            {exchangePage.name.toUpperCase()}
+          </Button>
+
           {isLogged && (
             <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
               {pages.map((page) => (
@@ -110,7 +127,6 @@ export const ResponsiveAppBar = () => {
             </Box>
           )}
 
-          
           {isLogged ? (
             <Box sx={{ display: 'flex', alignItems: 'center', ml: 'auto' }}>
               <Typography

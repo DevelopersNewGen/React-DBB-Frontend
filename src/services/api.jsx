@@ -147,6 +147,15 @@ export const getAllProducts = async () => {
     }
 };
 
+//Exchanges
+export const getExchanges = async (formData) => {
+    try {
+        return await apiClient.post('/exchange/', formData);
+    } catch (e) {
+        return { error: true, e };
+    }
+}
+
 export const getProductById = async (id) => {
     try {
         return await apiClient.get(`/products/${id}`);
@@ -293,3 +302,4 @@ export const getMovementById = async (mid) => {
     return { error: true, e };
   }
 };
+
