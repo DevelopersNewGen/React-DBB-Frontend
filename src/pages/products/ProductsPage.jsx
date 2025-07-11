@@ -1,71 +1,107 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ResponsiveAppBar } from "../../components/Navbar.jsx";
 import { ProductAdd } from "../../components/products/ProductAdd.jsx";
 import { ProductList } from "../../components/products/ProductList.jsx";
-import { Box, Typography, Alert } from "@mui/material";
-import { useProducts } from "../../shared/hooks/useProducts.jsx";
+import { CategorySection } from "../../components/products/CategorySection.jsx";
+import { ProductDetailsModal } from "../../components/products/ProductDetailsModal.jsx";
+import { Alert } from "@mui/material";
+import { useProducts, useUser } from "../../shared/hooks";
 import { AgregarServiciosButton } from "../../components/products/AgregarServiciosButton.jsx";
+import "./ProductsPage.css";
 
 export const ProductsPage = () => {
-  const { products, loading, error, success, resetMessages } = useProducts();
-
+  const { 
+    products, 
+    loading, 
+    error, 
+    success, 
+    resetMessages, 
+    fetchProducts,
+    removeProductFromState
+  } = useProducts();
+  
+  const { role } = useUser(); 
+  
   const [open, setOpen] = useState(false);
+  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState(null);
 
-  const handleProductCreated = () => {
+  const handleProductCreated = (newProduct) => {
     setTimeout(() => {
       resetMessages();
     }, 3000);
+    fetchProducts();
   };
 
-  const getUserRole = () => {
-    try {
-      const userStr = localStorage.getItem("user");
-      if (userStr) {
-        const user = JSON.parse(userStr);
-        if (user.username && user.username.toLowerCase().includes('admin')) {
-          return 'ADMIN_ROLE';
-        }
-        return 'USER_ROLE';
-      }
-      return null;
-    } catch (error) {
-      console.error("Error parsing user from localStorage:", error);
-      return null;
-    }
+  const handleProductDeleted = (deletedProductId) => {
+    removeProductFromState(deletedProductId);
   };
 
-  const role = getUserRole();
+  const handleOpenDetails = (productId) => {
+    setSelectedProductId(productId);
+    setDetailsModalOpen(true);
+  };
+
+  const handleCloseDetails = () => {
+    setDetailsModalOpen(false);
+    setSelectedProductId(null);
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   return (
     <>
       <ResponsiveAppBar />
-      <Box sx={{ padding: 3, marginTop: 10 }}>
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
-          <Typography variant="h4" component="h1">
-            Gestión de Productos
-          </Typography>
-
-          <AgregarServiciosButton role={role} onClick={() => setOpen(true)} />
-        </Box>
+      <div className="products-page-container">
+        <div className="products-header">
+          <h1 className="products-title">Gestión de Productos</h1>
+        </div>
 
         {error && (
-          <Alert severity="error" sx={{ mb: 2 }} onClose={resetMessages}>
-            {typeof error === "string" ? error : "Error al cargar productos"}
-          </Alert>
+          <div className="alert-container">
+            <Alert severity="error" onClose={resetMessages}>
+              {typeof error === "string" ? error : "Error al cargar productos"}
+            </Alert>
+          </div>
         )}
 
         {success && (
-          <Alert severity="success" sx={{ mb: 2 }} onClose={resetMessages}>
-            {success}
-          </Alert>
+          <div className="alert-container">
+            <Alert severity="success" onClose={resetMessages}>
+              {success}
+            </Alert>
+          </div>
         )}
 
-        <ProductAdd onProductCreated={handleProductCreated} open={open} setOpen={setOpen} />
+        <CategorySection />
 
-        <Box sx={{ mt: 4 }}>
-          <ProductList products={products} loading={loading} />
-        </Box>
-      </Box>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '24px' }}>
+          <AgregarServiciosButton role={role} onClick={() => setOpen(true)} />
+        </div>
+
+        <ProductAdd
+          onProductCreated={handleProductCreated}  
+          open={open}
+          setOpen={setOpen}
+        />
+
+        <div className="products-grid">
+          <ProductList 
+            products={products} 
+            loading={loading} 
+            onProductClick={handleOpenDetails}
+          />
+        </div>
+
+        <ProductDetailsModal
+          open={detailsModalOpen}
+          onClose={handleCloseDetails}
+          productId={selectedProductId}
+          onProductDeleted={handleProductDeleted}
+        />
+      </div>
     </>
   );
 };

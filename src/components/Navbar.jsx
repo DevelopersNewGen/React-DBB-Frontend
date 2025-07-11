@@ -25,19 +25,21 @@ import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import '../assets/navbar.css';
 
 const pagesAdmin = [
-  { name: 'Transferir', path: '/transferir', icon: <SwapHorizIcon sx={{ mr: 1 }} /> },
-  { name: 'Pagos', path: '/pagos', icon: <PaidIcon sx={{ mr: 1 }} /> },
+  { name: 'movimientos', path: '/movimientos', icon: <PaidIcon sx={{ mr: 1 }} /> },
   { name: 'Cuentas', path: '/cuentas', icon: <AccountBalanceIcon sx={{ mr: 1 }} /> },
   { name: 'Servicios', path: '/servicios', icon: <ReceiptLongIcon sx={{ mr: 1 }} /> },
-  { name: 'Clientes', path: '/clientes', icon: <GroupIcon sx={{ mr: 1 }} /> }
+  { name: 'Clientes', path: '/clientes', icon: <GroupIcon sx={{ mr: 1 }} /> },
+  { name: 'Depositar', path: '/depositar', icon: <PaidIcon sx={{ mr: 1 }} /> },
+  { name: 'Retirar', path: '/retirar', icon: <PaidIcon sx={{ mr: 1 }} /> }
 ];
 
 const pagesUser = [
   { name: 'Transferir', path: '/transferir', icon: <SwapHorizIcon sx={{ mr: 1 }} /> },
-  { name: 'Pagos', path: '/pagos', icon: <PaidIcon sx={{ mr: 1 }} /> },
+  { name: 'movimientos', path: '/movimientos', icon: <PaidIcon sx={{ mr: 1 }} /> },
   { name: 'Cuentas', path: '/cuentas', icon: <AccountBalanceIcon sx={{ mr: 1 }} /> },
   { name: 'Servicios', path: '/servicios', icon: <ReceiptLongIcon sx={{ mr: 1 }} /> },
-  { name: 'Divisas', path: '/exchange', icon: <MonetizationOnIcon sx={{ mr: 1 }} /> }
+  { name: 'Divisas', path: '/exchange', icon: <MonetizationOnIcon sx={{ mr: 1 }} /> },
+
 ];
 
 const exchangePage = { 
@@ -52,10 +54,10 @@ const settings = [
 ];
 
 export const ResponsiveAppBar = () => {
+  const { user, role, isLoading, getUser } = useUser(); 
   const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, role, isLoading } = useUser();
   const isLogged = !!user;
   const img = user?.img;
 
