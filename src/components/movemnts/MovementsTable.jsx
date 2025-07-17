@@ -30,7 +30,13 @@ export const MovementsTable = ({role}) => {
     } = useMovementsTable(role);
 
     return (
-        <Paper sx={{ width: "100%", overflowX: "auto" }}>
+        <Paper sx={{
+            width: "100%",
+            overflowX: "auto",
+            background: "#fff",   // Fondo blanco
+            color: "#222",        // Letra oscura
+            mt: 5                // Espacio superior para separar del navbar
+        }}>
             <Box sx={{ p: 2 }}>
                 <TextField
                     label="Buscar"
@@ -42,53 +48,69 @@ export const MovementsTable = ({role}) => {
                     }}
                     fullWidth
                     size="small"
+                    sx={{
+                        '& .MuiInputBase-input': { color: '#222' },
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': { borderColor: '#bbb' },
+                            '&:hover fieldset': { borderColor: '#1976d2' },
+                            '&.Mui-focused fieldset': { borderColor: '#1976d2' },
+                        },
+                        '& label': { color: '#222' },
+                        '& label.Mui-focused': { color: '#1976d2' }
+                    }}
                 />
             </Box>
-            <TableContainer>
+            <TableContainer sx={{ background: "transparent" }}>
                 <Table>
                     <TableHead>
-                        <TableRow>
-                            <TableCell>Monto</TableCell>
-                            <TableCell>Tipo</TableCell>
-                            <TableCell>Descripción</TableCell>
-                            <TableCell>Saldo después</TableCell>
-                            <TableCell>Cuenta Origen</TableCell>
-                            <TableCell>Cuenta Destino</TableCell>
-                            <TableCell>Estatus</TableCell>
-                            <TableCell>Fecha</TableCell>
-                            <TableCell>Acciones</TableCell>
+                        <TableRow sx={{ background: "#f5f5f5" }}>
+                            <TableCell sx={{ color: "#1976d2", fontWeight: "bold", fontSize: "16px" }}>Monto</TableCell>
+                            <TableCell sx={{ color: "#1976d2", fontWeight: "bold", fontSize: "16px" }}>Tipo</TableCell>
+                            <TableCell sx={{ color: "#1976d2", fontWeight: "bold", fontSize: "16px" }}>Descripción</TableCell>
+                            <TableCell sx={{ color: "#1976d2", fontWeight: "bold", fontSize: "16px" }}>Saldo después</TableCell>
+                            <TableCell sx={{ color: "#1976d2", fontWeight: "bold", fontSize: "16px" }}>Cuenta Origen</TableCell>
+                            <TableCell sx={{ color: "#1976d2", fontWeight: "bold", fontSize: "16px" }}>Cuenta Destino</TableCell>
+                            <TableCell sx={{ color: "#1976d2", fontWeight: "bold", fontSize: "16px" }}>Estatus</TableCell>
+                            <TableCell sx={{ color: "#1976d2", fontWeight: "bold", fontSize: "16px" }}>Fecha</TableCell>
+                            <TableCell sx={{ color: "#1976d2", fontWeight: "bold", fontSize: "16px" }}>Acciones</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {loading ? (
                             <TableRow>
-                                <TableCell colSpan={9} align="center">
+                                <TableCell colSpan={9} align="center" sx={{ color: "#222" }}>
                                     Cargando...
                                 </TableCell>
                             </TableRow>
                         ) : filteredMovements.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={9} align="center">
+                                <TableCell colSpan={9} align="center" sx={{ color: "#222" }}>
                                     No hay movimientos para mostrar.
                                 </TableCell>
                             </TableRow>
                         ) : (
                             filteredMovements.map((mov, idx) => (
-                                <TableRow key={idx}>
-                                    <TableCell>${mov.amount}</TableCell>
+                                <TableRow
+                                    key={idx}
+                                    sx={{
+                                        background: "#fff",
+                                        '&:hover': { background: "#e3f2fd" }
+                                    }}
+                                >
+                                    <TableCell sx={{ color: "#222", fontSize: "15px" }}>${mov.amount}</TableCell>
                                     <TableCell>
                                         <Chip label={mov.type} color={typeColors[mov.type] || "default"} size="small" />
                                     </TableCell>
-                                    <TableCell>{mov.description || "-"}</TableCell>
-                                    <TableCell>${mov.balanceAfter}</TableCell>
-                                    <TableCell>
+                                    <TableCell sx={{ color: "#222", fontSize: "15px" }}>{mov.description || "-"}</TableCell>
+                                    <TableCell sx={{ color: "#222", fontSize: "15px" }}>${mov.balanceAfter}</TableCell>
+                                    <TableCell sx={{ color: "#222", fontSize: "15px" }}>
                                         {mov.originAccount
                                             ? (typeof mov.originAccount === "object" && mov.originAccount !== null
                                                 ? mov.originAccount.accountNumber || mov.originAccount._id
                                                 : mov.originAccount)
                                             : "-"}
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell sx={{ color: "#222", fontSize: "15px" }}>
                                         {mov.destinationAccount
                                             ? (typeof mov.destinationAccount === "object" && mov.destinationAccount !== null
                                                 ? mov.destinationAccount.accountNumber || mov.destinationAccount._id
@@ -98,7 +120,7 @@ export const MovementsTable = ({role}) => {
                                     <TableCell>
                                         <Chip label={mov.status} color={statusColors[mov.status] || "default"} size="small" />
                                     </TableCell>
-                                    <TableCell>
+                                    <TableCell sx={{ color: "#222", fontSize: "15px" }}>
                                         {mov.date ? new Date(mov.date).toLocaleString() : "-"}
                                     </TableCell>
                                     <TableCell>
@@ -108,6 +130,7 @@ export const MovementsTable = ({role}) => {
                                                     <IconButton
                                                         size="small"
                                                         onClick={() => handleActionClick(mov)}
+                                                        sx={{ color: "#1976d2" }}
                                                     >
                                                         <EditIcon />
                                                     </IconButton>
@@ -133,6 +156,14 @@ export const MovementsTable = ({role}) => {
                 }}
                 rowsPerPageOptions={[5, 10, 25, 50]}
                 labelRowsPerPage="Filas por página"
+                sx={{
+                    background: "#f5f5f5",
+                    color: "#222",
+                    '& .MuiTablePagination-toolbar': { color: "#222" },
+                    '& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows': { color: "#222" },
+                    '& .MuiTablePagination-actions': { color: "#222" },
+                    '& .MuiInputBase-root': { color: "#222" },
+                }}
             />
             <MovementActionsDialog
                 open={dialogOpen}

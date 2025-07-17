@@ -26,14 +26,17 @@
 
 .navbar-page-button {
   color: #cccccc;
-  border: 1px solid #444;
-  margin-right: 8px;
-  padding: 6px 16px;
+  margin-right: 10px;
+  padding: 8px 16px;
   font-weight: 600;
   font-size: 0.875rem;
   text-transform: uppercase;
   background-color: transparent;
   transition: all 0.3s ease;
+  display: flex  !important;          
+  flex-direction: row  !important;    
+  align-items: center !important ;    
+  gap: 3px  !important;
 }
 
 .navbar-page-button:hover {

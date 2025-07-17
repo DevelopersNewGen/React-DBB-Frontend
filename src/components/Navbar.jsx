@@ -100,7 +100,7 @@ export const ResponsiveAppBar = () => {
       <Container maxWidth={false} className="navbar-container">
         <Toolbar disableGutters className="navbar-toolbar">
           
-          <img src="/logo.png" alt="Logo" style={{ height: 56, marginRight: 24 }} className="navbar-logo" />
+          <img src="/logo.png" alt="Logo" style={{ height: 100, marginRight: 24 }} className="navbar-logo" />
 
           <Button
             onClick={() => handlePages(exchangePage.path)}

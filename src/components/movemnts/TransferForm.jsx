@@ -1,80 +1,99 @@
 import React, { useState } from "react";
-import { TextField, Button, Box, Typography, Paper, Modal, Fade } from "@mui/material";
-import { CheckCircleOutline } from "@mui/icons-material";
-import { useUserAccounts } from "../../shared/hooks/useUserAccounts";
+import { Box, Paper, Typography, TextField, Button } from "@mui/material";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
-const TransferForm = ({ onSubmit, loading }) => {
-  const { accounts, refetch } = useUserAccounts();
+const DepositForm = ({ onSubmit, loading }) => {
   const [form, setForm] = useState({
-    originAccount: "",
-    destinationAccount: "",
+    accountNumber: "",
     amount: "",
     description: "",
   });
 
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const isFormValid =
+    form.accountNumber &&
+    parseFloat(form.amount) > 0;
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSelectOrigin = (accountNumber) => {
-    setForm((prev) => ({ ...prev, originAccount: accountNumber }));
-  };
-
-  const isFormValid =
-    form.originAccount &&
-    form.destinationAccount &&
-    parseFloat(form.amount) > 0;
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (!isFormValid) return;
-
-    const selected = accounts.find(
-      (acc) => acc.accountNumber === form.originAccount
-    );
-
-    if (onSubmit && selected?.accountNumber) {
-      const result = await onSubmit({ ...form, originAccount: selected.accountNumber });
-      if (
-        result &&
-        (
-          result.success === true ||
-          result.ok === true ||
-          result.status === "success" ||
-          result.msg === "Transferencia realizada con éxito"
-        )
-      ) {
-        setShowSuccessModal(true);
-        await refetch();
-        setTimeout(() => setShowSuccessModal(false), 2000);
-      }
+    if (isFormValid && onSubmit) {
+      onSubmit(form);
+      setForm({ accountNumber: "", amount: "", description: "" });
     }
-
-    setForm({
-      originAccount: "",
-      destinationAccount: "",
-      amount: "",
-      description: "",
-    });
   };
 
   return (
-    <Box sx={{ display: "flex", justifyContent: "center", mt: 4, gap: 5, fontWeight: "bold" }}>
-      <Box sx={{ maxWidth: 400, width: "100%" }}>
-        <Typography variant="h5" mb={2}>
-          Transferencia
+    <Box
+      sx={{
+        minHeight: "100vh",
+        width: "100vw",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        bgcolor: "#f4f7fb", // Fondo suave y moderno
+      }}
+    >
+      {/* Formulario en primer plano */}
+      <Paper
+        elevation={12}
+        sx={{
+          minWidth: 380,
+          maxWidth: 440,
+          p: 5,
+          borderRadius: 5,
+          boxShadow: "0 8px 32px rgba(30,41,59,0.18)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          background: "rgba(255,255,255,0.96)",
+          backdropFilter: "blur(1.5px)",
+        }}
+      >
+        <Box
+          sx={{
+            bgcolor: "#1976d2",
+            width: 64,
+            height: 64,
+            borderRadius: "50%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            mb: 2,
+            boxShadow: 2,
+          }}
+        >
+          <AttachMoneyIcon sx={{ fontSize: 38, color: "#fff" }} />
+        </Box>
+        <Typography
+          variant="h4"
+          fontWeight="bold"
+          sx={{
+            color: "#1976d2",
+            mb: 2,
+            textShadow: "0 2px 6px #fff6",
+            letterSpacing: "1px",
+          }}
+        >
+          Depósito
         </Typography>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} style={{ width: "100%" }}>
           <TextField
-            label="Cuenta Destino (ID)"
-            name="destinationAccount"
-            value={form.destinationAccount}
+            label="Cuenta destino"
+            name="accountNumber"
+            value={form.accountNumber}
             onChange={handleChange}
             fullWidth
             margin="normal"
             required
+            sx={{
+              bgcolor: "#f5faff",
+              borderRadius: 2,
+              '& .MuiInputBase-input': { fontSize: "1.15rem" },
+              '& label': { fontSize: "1.08rem" },
+            }}
           />
           <TextField
             label="Monto"
@@ -85,6 +104,12 @@ const TransferForm = ({ onSubmit, loading }) => {
             fullWidth
             margin="normal"
             required
+            sx={{
+              bgcolor: "#f5faff",
+              borderRadius: 2,
+              '& .MuiInputBase-input': { fontSize: "1.15rem" },
+              '& label': { fontSize: "1.08rem" },
+            }}
           />
           <TextField
             label="Descripción"
@@ -93,6 +118,12 @@ const TransferForm = ({ onSubmit, loading }) => {
             onChange={handleChange}
             fullWidth
             margin="normal"
+            sx={{
+              bgcolor: "#f5faff",
+              borderRadius: 2,
+              '& .MuiInputBase-input': { fontSize: "1.15rem" },
+              '& label': { fontSize: "1.08rem" },
+            }}
           />
           <Button
             type="submit"
@@ -100,105 +131,22 @@ const TransferForm = ({ onSubmit, loading }) => {
             color="primary"
             fullWidth
             disabled={loading || !isFormValid}
-            sx={{ mt: 2 }}
-          >
-            TRANSFERIR
-          </Button>
-        </form>
-      </Box>
-
-      <Box sx={{ minWidth: 400 }}>
-        <Typography variant="subtitle1" mb={2} fontWeight="bold">
-          Selecciona la cuenta de origen:
-        </Typography>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
-          {accounts.map((acc, idx) => {
-            const isSelected = form.originAccount === acc.accountNumber;
-            return (
-              <Box key={idx}>
-                <Typography
-                  variant="subtitle2"
-                  fontWeight="bold"
-                  sx={{ borderBottom: "2px solid black" }}
-                >
-                  CUENTA: {acc.accountType?.toUpperCase()}
-                </Typography>
-                <Paper
-                  elevation={4}
-                  onClick={() => handleSelectOrigin(acc.accountNumber)}
-                  sx={{
-                    mt: 1,
-                    backgroundColor: "#000",
-                    color: "#fff",
-                    borderRadius: 2,
-                    p: 2,
-                    cursor: "pointer",
-                    border: isSelected ? "2px solid #1976d2" : "none",
-                    transition: "all 0.3s ease-in-out",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      fontWeight: "bold",
-                      borderBottom: "1px solid #fff",
-                      pb: 1,
-                      mb: 1,
-                    }}
-                  >
-                    <Typography variant="body2">NO. CUENTA</Typography>
-                    <Typography variant="body2">DISPONIBLE</Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      fontFamily: "monospace",
-                    }}
-                  >
-                    <Typography variant="body1">
-                      {acc.accountNumber}
-                    </Typography>
-                    <Typography variant="body1">
-                      Q{Number(acc.balance).toFixed(2)}
-                    </Typography>
-                  </Box>
-                </Paper>
-              </Box>
-            );
-          })}
-        </Box>
-      </Box>
-
-      {/* Modal animado con check */}
-      <Modal open={showSuccessModal} closeAfterTransition>
-        <Fade in={showSuccessModal}>
-          <Box
             sx={{
-              position: "fixed",
-              top: 0,
-              left: 0,
-              width: "100vw",
-              height: "100vh",
-              bgcolor: "rgba(255,255,255,0.95)",
-              zIndex: 9999,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-              textAlign: "center",
+              mt: 3,
+              py: 1.5,
+              fontSize: "1.1rem",
+              borderRadius: 2,
+              fontWeight: "bold",
+              boxShadow: 2,
+              letterSpacing: "1px",
             }}
           >
-            <CheckCircleOutline sx={{ fontSize: 100, color: "green" }} />
-            <Typography variant="h5" mt={2} fontWeight="bold">
-              ¡Transferencia exitosa!
-            </Typography>
-          </Box>
-        </Fade>
-      </Modal>
+            DEPOSITAR
+          </Button>
+        </form>
+      </Paper>
     </Box>
   );
 };
 
-export default TransferForm;
+export default DepositForm;
