@@ -1,339 +1,219 @@
-import React, { useState } from "react";
-import {
-  Box,
-  Grid,
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  ToggleButton,
-  ToggleButtonGroup,
-  Button,
-  Typography,
-  Paper,
-  Divider,
-} from "@mui/material";
-import { useExchange } from "../../shared/hooks/useExchanges";
-import "../../assets/exchange.css";
+  import React, { useState } from "react";
+  import {
+    Box,
+    Grid,
+    TextField,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    ToggleButton,
+    ToggleButtonGroup,
+    Button,
+    Typography,
+  } from "@mui/material";
+  import { useExchange } from "../../shared/hooks/useExchanges";
 
-const currencyOptions = [
-  { code: "USD", label: "USD - Dólar estadounidense" },
-  { code: "EUR", label: "EUR - Euro" },
-  { code: "GBP", label: "GBP - Libra esterlina" },
-  { code: "GTQ", label: "GTQ - Quetzal" },
-];
+  const currencyOptions = [
+    { code: "USD", label: "USD - Dólar estadounidense" },
+    { code: "EUR", label: "EUR - Euro" },
+    { code: "GBP", label: "GBP - Libra esterlina" },
+    { code: "GTQ", label: "GTQ - Quetzal" },
+  ];
 
-export const ExchangeCalculator = () => {
-  const [operation, setOperation] = useState("compra");
-  const [amount, setAmount] = useState("");
-  const [fromCurrencySelected, setFromCurrencySelected] = useState("USD");
-  const [toCurrencySelected, setToCurrencySelected] = useState("USD");
-  const [lastCalculation, setLastCalculation] = useState(null);
+  export const ExchangeCalculator = () => {
+    const [operation, setOperation] = useState("compra");
+    const [amount, setAmount] = useState("");
+    const [fromCurrencySelected, setFromCurrencySelected] = useState("USD");
+    const [toCurrencySelected, setToCurrencySelected] = useState("USD");
+    const [lastCalculation, setLastCalculation] = useState(null);
+    const fromCurrency = operation === "compra" ? fromCurrencySelected : "GTQ";
+    const toCurrency = operation === "compra" ? "GTQ" : toCurrencySelected;
 
-  const fromCurrency = operation === "compra" ? fromCurrencySelected : "GTQ";
-  const toCurrency = operation === "compra" ? "GTQ" : toCurrencySelected;
+    const {
+      conversionRate,
+      netAmount,
+      isLoading,
+      error,
+      convert,
+    } = useExchange();
 
-  const { conversionRate, netAmount, isLoading, error, convert } = useExchange();
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const numericAmount = parseFloat(amount);
-    if (isNaN(numericAmount) || numericAmount <= 0) return;
-
-    const calculationData = {
-      operation,
-      fromCurrency,
-      toCurrency,
-      amount: numericAmount
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      const numericAmount = parseFloat(amount);
+      if (isNaN(numericAmount) || numericAmount <= 0) {
+        return;
+      }
+      const calculationData = {
+        operation,
+        fromCurrency,
+        toCurrency,
+        amount: numericAmount
+      };
+      setLastCalculation(calculationData);
+      
+      convert({ 
+        from: fromCurrency, 
+        to: toCurrency, 
+        amount: numericAmount,
+        operation
+      });
     };
-    setLastCalculation(calculationData);
 
-    convert({ from: fromCurrency, to: toCurrency, amount: numericAmount, operation });
-  };
-
-  return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        bgcolor: "#f4f7fb",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        py: 4,
-      }}
-    >
-      <Paper
-        elevation={10}
-        sx={{
-          maxWidth: 720,
-          width: "100%",
-          mx: 2,
-          py: 5,
-          px: 4,
-          borderRadius: 5,
-          boxShadow: "0 8px 32px rgba(30,41,59,0.17)",
-          backgroundColor: "#fff",
-          display: "flex",
-          flexDirection: "column",
-          gap: 4,
-        }}
-      >
-        <Typography
-          variant="h4"
-          textAlign="center"
-          fontWeight="bold"
-          mb={2}
-          color="#1976d2"
-          sx={{ letterSpacing: "1px" }}
-        >
-          Calculadora de Divisas
-        </Typography>
-
-        {/* Rates Panel */}
-        <Box
-          sx={{
-            display: "flex",
-            gap: 3,
-            justifyContent: "center",
-            mb: 2,
-            flexWrap: "wrap",
-          }}
-        >
-          <Paper
-            elevation={2}
-            sx={{
-              p: 2,
-              minWidth: 170,
-              borderRadius: 3,
-              bgcolor: "#e3f2fd",
-              boxShadow: "0 6px 16px rgba(25,118,210,0.07)",
-            }}
-          >
-            <Typography fontWeight="bold" color="#1976d2">DBB Compra</Typography>
-            <Typography variant="body2" mb={1}>Tengo USD/EUR/GBP y banco me da GTQ</Typography>
-            <Divider sx={{ my: 1 }} />
-            <Typography sx={{ fontSize: "1rem" }}>1 USD = 7.46 GTQ</Typography>
-            <Typography sx={{ fontSize: "1rem" }}>1 EUR = 8.79 GTQ</Typography>
-            <Typography sx={{ fontSize: "1rem" }}>1 GBP = 10.18 GTQ</Typography>
-          </Paper>
-          <Paper
-            elevation={2}
-            sx={{
-              p: 2,
-              minWidth: 170,
-              borderRadius: 3,
-              bgcolor: "#fce4ec",
-              boxShadow: "0 6px 16px rgba(233,30,99,0.07)",
-            }}
-          >
-            <Typography fontWeight="bold" color="#d81b60">DBB Vende</Typography>
-            <Typography variant="body2" mb={1}>Tengo GTQ y banco me da USD/EUR/GBP</Typography>
-            <Divider sx={{ my: 1 }} />
-            <Typography sx={{ fontSize: "1rem" }}>1 GTQ = 0.13 USD</Typography>
-            <Typography sx={{ fontSize: "1rem" }}>1 GTQ = 0.11 EUR</Typography>
-            <Typography sx={{ fontSize: "1rem" }}>1 GTQ = 0.09 GBP</Typography>
-          </Paper>
+    return (
+      <Box className="bg-blue-50 rounded-xl shadow-lg p-4 md:p-8 mx-auto my-6 w-full overflow-x-auto">
+        <Box className="flex flex-col md:flex-row justify-between items-stretch gap-4 mb-6 min-w-[1200px]">
+          <Box className="bg-blue-100 rounded-lg p-6 flex-1 min-w-[400px]">
+            <Typography className="font-bold text-blue-900 text-xl mb-2 font-mono">DBB Compra</Typography>
+            <Typography className="text-blue-900 mb-1 font-mono">Tengo USD, EUR o GBP y banco me da GTQ</Typography>
+            <Typography className="text-blue-800 font-mono">1 USD = 7.46 GTQ</Typography>
+            <Typography className="text-blue-800 font-mono">1 EUR = 8.79 GTQ</Typography>
+            <Typography className="text-blue-800 font-mono">1 GBP = 10.18 GTQ</Typography>
+          </Box>
+          <Box className="bg-blue-100 rounded-lg p-6 flex-1 min-w-[400px]">
+            <Typography className="font-bold text-blue-900 text-xl mb-2 font-mono">DBB Vende</Typography>
+            <Typography className="text-blue-900 mb-1 font-mono">Tengo GTQ y banco me da USD, EUR o GBP</Typography>
+            <Typography className="text-blue-800 font-mono">1 GTQ = 0.13 USD</Typography>
+            <Typography className="text-blue-800 font-mono">1 GTQ = 0.11 EUR</Typography>
+            <Typography className="text-blue-800 font-mono">1 GTQ = 0.09 GBP</Typography>
+          </Box>
         </Box>
 
-        <Divider sx={{ my: 2 }} />
-
-        <Typography
-          variant="h6"
-          textAlign="center"
-          mb={2}
-          color="#1976d2"
-        >
-          Calcular tu cambio
+        <Typography variant="h6" className="text-blue-900 font-bold font-mono mb-2 text-center">
+          Calcular
         </Typography>
 
-        <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+      <Box className="flex flex-col items-center justify-center">
           <ToggleButtonGroup
             value={operation}
             exclusive
             onChange={(_, val) => val && setOperation(val)}
-            sx={{
-              bgcolor: "#f5faff",
-              borderRadius: 2,
-              boxShadow: "0 2px 8px #1976d233",
-              gap: 2,
-              mb: 2,
-            }}
+            className="flex justify-center mb-4"
           >
             <ToggleButton
               value="compra"
-              sx={{
-                px: 4,
-                py: 1,
-                fontWeight: "bold",
-                fontSize: "1rem",
-                color: operation === "compra" ? "#fff" : "#1976d2",
-                bgcolor: operation === "compra" ? "#1976d2" : "#e3f2fd",
-                borderRadius: 2,
-                transition: "all 0.2s",
-                boxShadow: operation === "compra" ? 3 : 0,
-                "&:hover": { bgcolor: "#1976d2", color: "#fff" },
-              }}
+              className={`font-mono font-medium px-6 py-2 rounded-l-lg ${operation === "compra" ? "bg-blue-900 text-blue-100" : "bg-blue-100 text-blue-900"} transition`}
             >
               DBB Compra
             </ToggleButton>
             <ToggleButton
               value="vende"
-              sx={{
-                px: 4,
-                py: 1,
-                fontWeight: "bold",
-                fontSize: "1rem",
-                color: operation === "vende" ? "#fff" : "#d81b60",
-                bgcolor: operation === "vende" ? "#d81b60" : "#fce4ec",
-                borderRadius: 2,
-                transition: "all 0.2s",
-                boxShadow: operation === "vende" ? 3 : 0,
-                "&:hover": { bgcolor: "#d81b60", color: "#fff" },
-              }}
+              className={`font-mono font-medium px-6 py-2 rounded-r-lg ${operation === "vende" ? "bg-blue-900 text-blue-100" : "bg-blue-100 text-blue-900"} transition`}
             >
               DBB Vende
             </ToggleButton>
           </ToggleButtonGroup>
-        </Box>
 
-        {/* Horizontal Form */}
-        <form onSubmit={handleSubmit}>
-          <Grid container spacing={2} alignItems="center" justifyContent="center">
-            <Grid item xs={4}>
-              <TextField
-                label="Monto"
-                type="number"
-                fullWidth
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                required
-                sx={{
-                  bgcolor: "#f5faff",
-                  borderRadius: 2,
-                  '& .MuiInputBase-input': { fontSize: "1.1rem" },
-                  '& label': { fontSize: "1rem" },
-                }}
-              />
-            </Grid>
+          <form onSubmit={handleSubmit} className="mb-2 min-w-[800px]">
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  label="Monto"
+                  type="number"
+                  fullWidth
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  className="font-mono"
+                  required
+                  InputProps={{ className: "font-mono text-blue-900" }}
+                  InputLabelProps={{ className: "font-mono text-blue-900" }}
+                />
+              </Grid>
 
-            <Grid item xs={3}>
-              <FormControl fullWidth>
-                <InputLabel>De</InputLabel>
-                <Select
-                  value={fromCurrency}
-                  label="De"
-                  disabled={operation === "vende"}
-                  onChange={(e) => operation === "compra" && setFromCurrencySelected(e.target.value)}
-                  sx={{ bgcolor: "#f5faff", borderRadius: 2 }}
-                >
-                  {operation === "compra"
-                    ? currencyOptions.filter(opt => opt.code !== "GTQ").map(option => (
-                        <MenuItem key={option.code} value={option.code}>
+              <Grid item xs={5}>
+                <FormControl fullWidth>
+                  <InputLabel className="font-mono text-blue-900">De</InputLabel>
+                  <Select
+                    value={fromCurrency}
+                    label="De"
+                    disabled={operation === "vende"}
+                    onChange={(e) => operation === "compra" && setFromCurrencySelected(e.target.value)}
+                    className="font-mono text-blue-900"
+                  >
+                    {operation === "compra" ? (
+                      currencyOptions.filter(opt => opt.code !== "GTQ").map(option => (
+                        <MenuItem key={option.code} value={option.code} className="font-mono text-blue-900">
                           {option.label}
                         </MenuItem>
                       ))
-                    : <MenuItem value={fromCurrency}>
+                    ) : (
+                      <MenuItem value={fromCurrency} className="font-mono text-blue-900">
                         {currencyOptions.find(opt => opt.code === fromCurrency)?.label}
-                      </MenuItem>}
-                </Select>
-              </FormControl>
-            </Grid>
+                      </MenuItem>
+                    )}
+                  </Select>
+                </FormControl>
+              </Grid>
 
-            <Grid item xs={1} sx={{ textAlign: "center" }}>
-              <Typography sx={{ fontSize: "2rem" }}>⇄</Typography>
-            </Grid>
+              <Grid item xs={2} className="flex items-center justify-center">
+                <Typography className="text-blue-900 text-2xl font-bold">⇄</Typography>
+              </Grid>
 
-            <Grid item xs={3}>
-              <FormControl fullWidth>
-                <InputLabel>A</InputLabel>
-                <Select
-                  value={toCurrency}
-                  label="A"
-                  disabled={operation === "compra"}
-                  onChange={(e) => operation === "vende" && setToCurrencySelected(e.target.value)}
-                  sx={{ bgcolor: "#f5faff", borderRadius: 2 }}
-                >
-                  {operation === "vende"
-                    ? currencyOptions.filter(opt => opt.code !== "GTQ").map(option => (
-                        <MenuItem key={option.code} value={option.code}>
+              <Grid item xs={5}>
+                <FormControl fullWidth>
+                  <InputLabel className="font-mono text-blue-900">A</InputLabel>
+                  <Select
+                    value={toCurrency}
+                    label="A"
+                    disabled={operation === "compra"}
+                    onChange={(e) => operation === "vende" && setToCurrencySelected(e.target.value)}
+                    className="font-mono text-blue-900"
+                  >
+                    {operation === "vende" ? (
+                      currencyOptions.filter(opt => opt.code !== "GTQ").map(option => (
+                        <MenuItem key={option.code} value={option.code} className="font-mono text-blue-900">
                           {option.label}
                         </MenuItem>
                       ))
-                    : <MenuItem value={toCurrency}>
+                    ) : (
+                      <MenuItem value={toCurrency} className="font-mono text-blue-900">
                         {currencyOptions.find(opt => opt.code === toCurrency)?.label}
-                      </MenuItem>}
-                </Select>
-              </FormControl>
+                      </MenuItem>
+                    )}
+                  </Select>
+                </FormControl>
+              </Grid>
             </Grid>
 
-            <Grid item xs={12}>
+            {/* Botón fuera del Grid */}
+            <div className="flex justify-center mt-6">
               <Button
                 type="submit"
                 variant="contained"
                 disabled={isLoading || !amount || parseFloat(amount) <= 0}
-                fullWidth
-                sx={{
-                  py: 2,
-                  fontSize: "1.15rem",
-                  borderRadius: 2,
-                  fontWeight: "bold",
-                  boxShadow: 2,
-                  letterSpacing: "1px",
-                  bgcolor: "#1976d2",
-                  "&:hover": { bgcolor: "#1565c0" },
-                }}
+                className="group w-1/3 font-mono font-medium rounded-lg px-4 py-2 bg-blue-900 text-blue-100 hover:bg-blue-800 transition"
               >
                 {isLoading ? "Calculando…" : "Calcular"}
               </Button>
-            </Grid>
-          </Grid>
-        </form>
+            </div>
+          </form>
 
-        {/* Result */}
-        {conversionRate !== null && netAmount !== null && lastCalculation && (
-          <Paper
-            elevation={4}
-            sx={{
-              mt: 4,
-              p: 3,
-              borderRadius: 3,
-              bgcolor: "#e3f2fd",
-              textAlign: "center",
-              boxShadow: "0 4px 12px #1976d244",
-            }}
-            className="result-box"
+
+          {conversionRate !== null && netAmount !== null && lastCalculation && (
+            <Box className="bg-blue-100 rounded-lg p-4 mt-4 text-center min-w-[400px]">
+              <Typography className="font-bold text-blue-900 font-mono mb-2">Resultado:</Typography>
+              <Typography className="text-blue-900 font-mono text-lg">
+                {lastCalculation.amount} {lastCalculation.fromCurrency} = {netAmount.toFixed(2)} {lastCalculation.toCurrency}
+              </Typography>
+            </Box>
+          )}
+
+          {error && (
+            <Typography color="error" mt={2} className="font-mono text-center">
+              {error}
+            </Typography>
+          )}
+
+          <Typography 
+            variant="body2" 
+            color="text.secondary" 
+            mt={3} 
+            textAlign="center"
+            className="italic text-blue-900"
           >
-            <Typography className="result-title" fontWeight="bold" color="#1976d2" mb={1}>
-              Resultado:
-            </Typography>
-            <Typography
-              className="result-value"
-              fontSize="1.6rem"
-              fontWeight="bold"
-              color="#1976d2"
-            >
-              {lastCalculation.amount} {lastCalculation.fromCurrency} = {netAmount.toFixed(2)} {lastCalculation.toCurrency}
-            </Typography>
-          </Paper>
-        )}
-
-        {error && (
-          <Typography color="error" mt={2} textAlign="center">
-            {error}
+            * Tenemos una comisión del 3% por cada cambio de divisa
           </Typography>
-        )}
-
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          mt={3}
-          textAlign="center"
-          sx={{ fontStyle: 'italic' }}
-        >
-          * Tenemos una comisión del 3% por cada cambio de divisa
-        </Typography>
-      </Paper>
-    </Box>
-  );
-};
+        </Box>
+      </Box>
+    );
+  };

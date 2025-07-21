@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./accountPage.css";
 import { useAdminAccounts } from "../../shared/hooks/useAdminAccounts";
 import { useUserAccounts } from "../../shared/hooks/useUserAccounts";
 import AccountTable from "../../components/account/AccountTable";

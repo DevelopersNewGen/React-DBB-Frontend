@@ -1,7 +1,7 @@
 import React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useAccounts } from "../../shared/hooks/useAccounts.jsx";
-import { Button, Paper, Box, Typography } from "@mui/material";
+import { Button, Box, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const AllAccountsTable = () => {
@@ -16,6 +16,7 @@ const AllAccountsTable = () => {
       minWidth: 250,
       headerAlign: "center",
       align: "center",
+      headerClassName: "super-header"
     },
     { 
       field: "balance", 
@@ -24,6 +25,7 @@ const AllAccountsTable = () => {
       minWidth: 220,
       headerAlign: "center",
       align: "center",
+      headerClassName: "super-header",
       valueFormatter: (params) => 
         params.value?.toLocaleString("es-ES", { style: 'currency', currency: 'USD' }) ?? '',
     },
@@ -34,6 +36,7 @@ const AllAccountsTable = () => {
       minWidth: 230,
       headerAlign: "center",
       align: "center",
+      headerClassName: "super-header"
     },
     { 
       field: "userName", 
@@ -42,6 +45,7 @@ const AllAccountsTable = () => {
       minWidth: 250,
       headerAlign: "center",
       align: "center",
+      headerClassName: "super-header"
     },
     {
       field: "verMovimientos",
@@ -51,6 +55,7 @@ const AllAccountsTable = () => {
       sortable: false,
       headerAlign: "center",
       align: "center",
+      headerClassName: "super-header",
       renderCell: (params) => (
         <Button
           variant="outlined"
@@ -66,30 +71,15 @@ const AllAccountsTable = () => {
   ];
 
   return (
-    <Box 
-      sx={{ 
-        maxWidth: 1300, 
-        mx: "auto", 
-        p: { xs: 1, md: 3 }, 
-        mt: 3 
-      }}
-    >
+    <div className="bg-blue-50 rounded-xl shadow-lg p-4 md:p-8 mx-auto my-6 w-full overflow-x-auto">
       <Typography 
         variant="h4" 
         align="center" 
-        sx={{ mb: 3, fontWeight: 1000, color: "#1e1e1e" }}
+        className="text-blue-900 font-bold font-mono tracking-wide mb-4"
       >
         Todas las Cuentas
       </Typography>
-      <Paper 
-        elevation={5} 
-        sx={{ 
-          borderRadius: 4, 
-          overflow: "hidden", 
-          background: "#f8fafc", 
-          p: 2 
-        }}
-      >
+      <div className="min-w-[1500px] w-full" style={{ height: "700px" }}>
         <DataGrid
           rows={accounts}
           columns={columns}
@@ -99,43 +89,61 @@ const AllAccountsTable = () => {
           rowsPerPageOptions={[10, 20, 40]}
           disableRowSelectionOnClick
           autoHeight={false}
-          sx={{
-            border: "none",
-            "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: "#1976d2",
+          sx={{ border: "none",
+            fontFamily: "Poppins, monospace",
+            "& .super-header": {
+              backgroundColor: "#1e293b",
               color: "#fff",
-              fontSize: 16,
               fontWeight: 700,
+              fontSize: 18,
               letterSpacing: 1,
+              fontFamily: "monospace",
+              borderRight: "1px solid #334155",
+              borderTop: "none",
+              borderBottom: "none",
+              minHeight: "60px",
+              maxHeight: "60px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              borderRadius: "12px 12px 0 0",
             },
             "& .MuiDataGrid-row": {
               backgroundColor: "#fff",
+              fontFamily: "monospace",
+              fontSize: 16,
               "&:hover": {
                 backgroundColor: "#e3f2fd",
               },
             },
             "& .MuiDataGrid-cell": {
-              fontSize: 15,
+              fontSize: 16,
+              color: "#1e293b",
+              fontFamily: "monospace",
+              borderBottom: "1px solid #e0e7ef",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+              maxWidth: "400px",
+              whiteSpace: "normal",
+              wordBreak: "break-word",
             },
             "& .MuiDataGrid-footerContainer": {
               backgroundColor: "#f0f2f5",
               borderTop: "none",
+              fontFamily: "monospace",
             },
             "& .MuiDataGrid-virtualScroller": {
               backgroundColor: "#f8fafc",
             },
             "& .MuiButton-root": {
               transition: "background 0.2s",
-            },
-            "& .MuiDataGrid-columnHeader": {
-      color: "#1976d2", // Solo el header "Número de Cuenta" en rojo
-      fontWeight: "bold",
-              },
-          }}
+            },}}
         />
-      </Paper>
-    </Box>
+      </div>
+    </div>
   );
 };
+
 
 export default AllAccountsTable;

@@ -1,17 +1,22 @@
 import React, { useState } from "react";
-import { Box, Paper, Typography, TextField, Button } from "@mui/material";
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import {
+  Box,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  CircularProgress,
+} from "@mui/material";
+import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 
-const DepositForm = ({ onSubmit, loading }) => {
+const MakeTransferForm = ({ onSubmit, loading }) => {
   const [form, setForm] = useState({
     accountNumber: "",
     amount: "",
     description: "",
   });
 
-  const isFormValid =
-    form.accountNumber &&
-    parseFloat(form.amount) > 0;
+  const isFormValid = form.accountNumber && parseFloat(form.amount) > 0;
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -26,127 +31,96 @@ const DepositForm = ({ onSubmit, loading }) => {
   };
 
   return (
-    <Box
+    <Paper
+      elevation={3}
       sx={{
-        minHeight: "100vh",
-        width: "100vw",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        bgcolor: "#f4f7fb", // Fondo suave y moderno
+        p: 4,
+        mt: 8,
+        maxWidth: 460,
+        mx: "auto",
+        borderRadius: 4,
+        boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
       }}
     >
-      {/* Formulario en primer plano */}
-      <Paper
-        elevation={12}
+      <Box
         sx={{
-          minWidth: 380,
-          maxWidth: 440,
-          p: 5,
-          borderRadius: 5,
-          boxShadow: "0 8px 32px rgba(30,41,59,0.18)",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          background: "rgba(255,255,255,0.96)",
-          backdropFilter: "blur(1.5px)",
+          mb: 2,
         }}
       >
         <Box
           sx={{
             bgcolor: "#1976d2",
-            width: 64,
-            height: 64,
+            width: 60,
+            height: 60,
             borderRadius: "50%",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            mb: 2,
-            boxShadow: 2,
+            mb: 1,
           }}
         >
-          <AttachMoneyIcon sx={{ fontSize: 38, color: "#fff" }} />
+          <SwapHorizIcon sx={{ fontSize: 34, color: "#fff" }} />
         </Box>
-        <Typography
-          variant="h4"
-          fontWeight="bold"
-          sx={{
-            color: "#1976d2",
-            mb: 2,
-            textShadow: "0 2px 6px #fff6",
-            letterSpacing: "1px",
-          }}
-        >
-          Depósito
+        <Typography variant="h5" fontWeight="bold" color="primary">
+          Transferencia Bancaria
         </Typography>
-        <form onSubmit={handleSubmit} style={{ width: "100%" }}>
-          <TextField
-            label="Cuenta destino"
-            name="accountNumber"
-            value={form.accountNumber}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            required
-            sx={{
-              bgcolor: "#f5faff",
-              borderRadius: 2,
-              '& .MuiInputBase-input': { fontSize: "1.15rem" },
-              '& label': { fontSize: "1.08rem" },
-            }}
-          />
-          <TextField
-            label="Monto"
-            name="amount"
-            type="number"
-            value={form.amount}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            required
-            sx={{
-              bgcolor: "#f5faff",
-              borderRadius: 2,
-              '& .MuiInputBase-input': { fontSize: "1.15rem" },
-              '& label': { fontSize: "1.08rem" },
-            }}
-          />
-          <TextField
-            label="Descripción"
-            name="description"
-            value={form.description}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            sx={{
-              bgcolor: "#f5faff",
-              borderRadius: 2,
-              '& .MuiInputBase-input': { fontSize: "1.15rem" },
-              '& label': { fontSize: "1.08rem" },
-            }}
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            fullWidth
-            disabled={loading || !isFormValid}
-            sx={{
-              mt: 3,
-              py: 1.5,
-              fontSize: "1.1rem",
-              borderRadius: 2,
-              fontWeight: "bold",
-              boxShadow: 2,
-              letterSpacing: "1px",
-            }}
-          >
-            DEPOSITAR
-          </Button>
-        </form>
-      </Paper>
-    </Box>
+      </Box>
+
+      <Box component="form" onSubmit={handleSubmit} noValidate>
+        <TextField
+          label="Cuenta de destino"
+          name="accountNumber"
+          value={form.accountNumber}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+          required
+          inputProps={{
+            inputMode: "numeric",
+            pattern: "[0-9]*",
+            style: { fontSize: "1.1rem" },
+          }}
+        />
+        <TextField
+          label="Monto"
+          name="amount"
+          type="number"
+          value={form.amount}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+          required
+          inputProps={{
+            min: 0.01,
+            step: 0.01,
+            style: { fontSize: "1.1rem" },
+          }}
+        />
+        <TextField
+          label="Descripción (opcional)"
+          name="description"
+          value={form.description}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+          inputProps={{ style: { fontSize: "1.05rem" } }}
+        />
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          fullWidth
+          disabled={loading || !isFormValid}
+          sx={{ mt: 2, py: 1.4, fontSize: "1.05rem", fontWeight: "bold" }}
+        >
+          {loading ? <CircularProgress size={24} color="inherit" /> : "Transferir"}
+        </Button>
+      </Box>
+    </Paper>
   );
 };
 
-export default DepositForm;
+export default MakeTransferForm;

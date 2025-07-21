@@ -60,21 +60,22 @@ export const UserTable = ({
   };
 
   const columns = [
-    { field: "name", headerName: "Nombre", flex: 1, minWidth: 130 },
-    { field: "username", headerName: "Usuario", flex: 1, minWidth: 110 },
-    { field: "dpi", headerName: "DPI", flex: 1, minWidth: 130 },
-    { field: "address", headerName: "Dirección", flex: 1, minWidth: 150 },
-    { field: "cellphone", headerName: "Teléfono", flex: 1, minWidth: 120 },
-    { field: "email", headerName: "Email", flex: 1, minWidth: 180 },
-    { field: "jobName", headerName: "Puesto", flex: 1, minWidth: 120 },
-    { field: "monthlyIncome", headerName: "Ingreso Mensual", flex: 1, minWidth: 130 },
-    { field: "role", headerName: "Rol", flex: 1, minWidth: 110 },
+    { field: "name", headerName: "Nombre", flex: 1, minWidth: 180, headerClassName: "super-header" },
+    { field: "username", headerName: "Usuario", flex: 1, minWidth: 140, headerClassName: "super-header" },
+    { field: "dpi", headerName: "DPI", flex: 1, minWidth: 180, headerClassName: "super-header" },
+    { field: "address", headerName: "Dirección", flex: 1, minWidth: 180, headerClassName: "super-header" },
+    { field: "cellphone", headerName: "Teléfono", flex: 1, minWidth: 140, headerClassName: "super-header" },
+    { field: "email", headerName: "Email", flex: 1, minWidth: 260, headerClassName: "super-header" },
+    { field: "jobName", headerName: "Puesto", flex: 1, minWidth: 160, headerClassName: "super-header" },
+    { field: "monthlyIncome", headerName: "Ingreso Mensual", flex: 1, minWidth: 160, headerClassName: "super-header" },
+    { field: "role", headerName: "Rol", flex: 1, minWidth: 140, headerClassName: "super-header" },
     {
       field: "actions",
       headerName: "Acciones",
-      minWidth: 80,
+      minWidth: 100,
       sortable: false,
       filterable: false,
+      headerClassName: "super-header",
       renderCell: (params) => (
         <>
           <IconButton
@@ -89,9 +90,11 @@ export const UserTable = ({
   ];
 
   return (
-    <div>
-      <h2>{title}</h2>
-      <div style={{ height: 600, width: "100%", overflowX: "auto" }}>
+    <div className="bg-blue-50 rounded-xl shadow-lg p-4 md:p-8 mx-auto my-6 w-full overflow-x-auto">
+      <h2 className="text-blue-900 font-bold text-xl md:text-2xl mb-4 text-center font-mono tracking-wide">
+        {title}
+      </h2>
+      <div className="min-w-[1800px] w-full" style={{ height: "700px" }}>
         <DataGrid
           rows={users}
           columns={columns}
@@ -101,6 +104,61 @@ export const UserTable = ({
           rowsPerPageOptions={[10, 20, 40]}
           disableRowSelectionOnClick
           autoHeight={false}
+          sx={{
+            border: "none",
+            fontFamily: "Poppins, monospace",
+            "& .super-header": {
+              backgroundColor: "#1e293b",
+              color: "#fff",
+              fontWeight: 700,
+              fontSize: 18,
+              letterSpacing: 1,
+              fontFamily: "monospace",
+              borderRight: "1px solid #334155",
+              borderTop: "none",
+              borderBottom: "none",
+              minHeight: "60px",
+              maxHeight: "60px",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+            },
+            "& .MuiDataGrid-columnHeaders": {
+              borderRadius: "12px 12px 0 0",
+            },
+            "& .MuiDataGrid-row": {
+              backgroundColor: "#fff",
+              fontFamily: "monospace",
+              fontSize: 16,
+              "&:hover": {
+                backgroundColor: "#e3f2fd",
+              },
+            },
+            "& .MuiDataGrid-cell": {
+              fontSize: 16,
+              color: "#1e293b",
+              fontFamily: "monospace",
+              borderBottom: "1px solid #e0e7ef",
+              paddingLeft: "16px",
+              paddingRight: "16px",
+              maxWidth: "400px",
+              whiteSpace: "normal",
+              wordBreak: "break-word",
+            },
+            "& .MuiDataGrid-footerContainer": {
+              backgroundColor: "#f0f2f5",
+              borderTop: "none",
+              fontFamily: "monospace",
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: "#f8fafc",
+            },
+            "& .MuiIconButton-root": {
+              color: "#1e293b",
+              "&:hover": {
+                backgroundColor: "#e3f2fd",
+              },
+            },
+          }}
         />
         <Menu
           anchorEl={anchorEl}

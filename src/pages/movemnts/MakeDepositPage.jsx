@@ -10,7 +10,7 @@ const MakeDepositPage = () => {
     return (
       <>
         <ResponsiveAppBar />
-        <div style={{ maxWidth: 400, margin: "0 auto", padding: 24 }}>
+        <div style={{ maxWidth: 4000, margin: "0 auto", padding: 24 }}>
           <h1>Cargando...</h1>
         </div>
       </>
@@ -21,7 +21,7 @@ const MakeDepositPage = () => {
     return (
       <>
         <ResponsiveAppBar />
-        <div style={{ maxWidth: 400, margin: "0 auto", padding: 24 }}>
+        <div style={{ maxWidth: 4000, margin: "0 auto", padding: 24 }}>
         </div>
       </>
     );
@@ -30,7 +30,7 @@ const MakeDepositPage = () => {
   return (
     <>
       <ResponsiveAppBar />
-      <div style={{ maxWidth: 400, margin: "0 auto", padding: 24 }}>
+      <div style={{ maxWidth: 4000, margin: "0 auto", padding: 24 }}>
         <h1>Depósito</h1>
         <MakeDepositForm />
       </div>

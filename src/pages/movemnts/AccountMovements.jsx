@@ -9,7 +9,7 @@ export const AccountMovements = () => {
     return (
         <div>
             <ResponsiveAppBar />
-            <div style={{ paddingTop: 80, maxWidth: 1200, margin: "0 auto" }}>
+            <div style={{ paddingTop: 80, maxWidth: 12000, margin: "0 auto" }}>
                 <AccountsMovements accountId={accountId} />
             </div>
         </div>

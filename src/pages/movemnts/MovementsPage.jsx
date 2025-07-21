@@ -16,7 +16,7 @@ export const MovementsPage = () => {
     return (
         <div>
             <ResponsiveAppBar />
-            <div style={{ maxWidth: 1200, margin: "0 auto", padding: 24 }}>
+            <div style={{ maxWidth: 12000, margin: "0 auto", padding: 24 }}>
                 <h1>Movimientos</h1>
                 <ButtonGroup sx={{ mb: 2 }}>
                     <Button
