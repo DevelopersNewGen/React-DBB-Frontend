@@ -26,7 +26,6 @@ export const UserEditAdmin = ({ open, onClose, user, onUserUpdated }) => {
 
   const { handleUpdateUserAdmin, loading, error, success } = useUserUpdateAdmin();
 
- 
   useEffect(() => {
     if (user) {
       setForm({
@@ -69,7 +68,9 @@ export const UserEditAdmin = ({ open, onClose, user, onUserUpdated }) => {
         sx: { backgroundColor: "#f5f5f5" },
       }}
     >
-      <DialogTitle sx={{ color: darkGray }}>Editar Usuario</DialogTitle>
+      <DialogTitle sx={{ color: darkGray, fontWeight: "bold", fontSize: "1.5rem" }}>
+        Editar Usuario
+      </DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit} id="user-edit-form">
           <Grid container spacing={2} columns={12}>
@@ -192,14 +193,22 @@ export const UserEditAdmin = ({ open, onClose, user, onUserUpdated }) => {
           )}
         </form>
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{ justifyContent: "center", gap: 2, pb: 3 }}>
         <Button
           onClick={onClose}
           disabled={loading}
           sx={{
-            backgroundColor: darkGray,
-            color: "#fff",
-            "&:hover": { backgroundColor: "#222" },
+            backgroundColor: "#99acff",
+            color: "#364159",
+            fontWeight: "600",
+            px: 4,
+            py: 1.3,
+            borderRadius: 2,
+            textTransform: "none",
+            transition: "background-color 0.2s ease",
+            "&:hover": {
+              backgroundColor: "#7a90d9",
+            },
           }}
         >
           Cancelar
@@ -210,9 +219,17 @@ export const UserEditAdmin = ({ open, onClose, user, onUserUpdated }) => {
           variant="contained"
           disabled={loading}
           sx={{
-            backgroundColor: darkGray,
+            backgroundColor: "#364159",
             color: "#fff",
-            "&:hover": { backgroundColor: "#222" },
+            fontWeight: "600",
+            px: 4,
+            py: 1.3,
+            borderRadius: 2,
+            textTransform: "none",
+            transition: "background-color 0.2s ease",
+            "&:hover": {
+              backgroundColor: "#2a3350",
+            },
           }}
         >
           Guardar Cambios

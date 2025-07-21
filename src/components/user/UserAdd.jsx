@@ -8,6 +8,8 @@ import {
   TextField,
   Grid,
   Alert,
+  Backdrop,
+  Box,
 } from "@mui/material";
 import { useUserCreate } from "../../shared/hooks";
 
@@ -59,152 +61,109 @@ export const UserAdd = ({ onUserCreated }) => {
     }
   };
 
-  const darkGray = "#333";
-
   return (
     <>
       <Button
         variant="contained"
         onClick={handleOpen}
-        style={{
-          float: "right",
-          marginBottom: 16,
-          backgroundColor: darkGray,
-          color: "#fff",
-        }}
         sx={{
+          float: "right",
+          mb: 2,
+          background: "linear-gradient(145deg, #364159, #99acff)",
+          color: "#fff",
+          fontWeight: "bold",
+          boxShadow: "0 4px 10px rgba(153,172,255,0.6)",
+          transition: "all 0.3s ease",
           "&:hover": {
-            backgroundColor: "#222",
+            background: "linear-gradient(145deg, #99acff, #364159)",
+            boxShadow: "0 6px 16px rgba(153,172,255,0.8)",
+            transform: "translateY(-2px)",
           },
         }}
       >
         Crear Usuario
       </Button>
+
       <Dialog
         open={open}
         onClose={handleClose}
         fullWidth
         maxWidth="sm"
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+            sx: {
+              backdropFilter: "blur(5px)",
+              backgroundColor: "rgba(54,65,89,0.3)", // azul semitransparente
+            },
+          },
+        }}
         PaperProps={{
-          sx: { backgroundColor: "#f5f5f5" },
+          sx: {
+            background: "rgba(255, 255, 255, 0.75)",
+            backdropFilter: "blur(12px)",
+            borderRadius: 3,
+            p: 3,
+            boxShadow: "0 8px 32px rgba(54,65,89,0.15)", // sombra azul
+          },
         }}
       >
-        <DialogTitle sx={{ color: darkGray }}>Crear Usuario</DialogTitle>
+        <DialogTitle
+          sx={{
+            fontWeight: "bold",
+            fontSize: "1.5rem",
+            color: "#364159",
+            mb: 2,
+            textAlign: "center",
+          }}
+        >
+          Crear Usuario
+        </DialogTitle>
+
         <DialogContent>
-          <form onSubmit={handleSubmit} id="user-add-form">
-            <Grid container spacing={2} columns={12}>
-              <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
-                <TextField
-                  label="Nombre"
-                  name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                  fullWidth
-                  required
-                  InputLabelProps={{ style: { color: darkGray } }}
-                  InputProps={{ style: { color: darkGray } }}
-                />
-              </Grid>
-              <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
-                <TextField
-                  label="Usuario"
-                  name="username"
-                  value={form.username}
-                  onChange={handleChange}
-                  fullWidth
-                  required
-                  InputLabelProps={{ style: { color: darkGray } }}
-                  InputProps={{ style: { color: darkGray } }}
-                />
-              </Grid>
-              <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
-                <TextField
-                  label="DPI"
-                  name="dpi"
-                  value={form.dpi}
-                  onChange={handleChange}
-                  fullWidth
-                  required
-                  InputLabelProps={{ style: { color: darkGray } }}
-                  InputProps={{ style: { color: darkGray } }}
-                />
-              </Grid>
-              <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
-                <TextField
-                  label="Dirección"
-                  name="address"
-                  value={form.address}
-                  onChange={handleChange}
-                  fullWidth
-                  required
-                  InputLabelProps={{ style: { color: darkGray } }}
-                  InputProps={{ style: { color: darkGray } }}
-                />
-              </Grid>
-              <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
-                <TextField
-                  label="Teléfono"
-                  name="cellphone"
-                  value={form.cellphone}
-                  onChange={handleChange}
-                  fullWidth
-                  required
-                  InputLabelProps={{ style: { color: darkGray } }}
-                  InputProps={{ style: { color: darkGray } }}
-                />
-              </Grid>
-              <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
-                <TextField
-                  label="Email"
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  fullWidth
-                  required
-                  type="email"
-                  InputLabelProps={{ style: { color: darkGray } }}
-                  InputProps={{ style: { color: darkGray } }}
-                />
-              </Grid>
-              <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
-                <TextField
-                  label="Contraseña"
-                  name="password"
-                  value={form.password}
-                  onChange={handleChange}
-                  fullWidth
-                  required
-                  type="password"
-                  InputLabelProps={{ style: { color: darkGray } }}
-                  InputProps={{ style: { color: darkGray } }}
-                />
-              </Grid>
-              <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
-                <TextField
-                  label="Puesto"
-                  name="jobName"
-                  value={form.jobName}
-                  onChange={handleChange}
-                  fullWidth
-                  required
-                  InputLabelProps={{ style: { color: darkGray } }}
-                  InputProps={{ style: { color: darkGray } }}
-                />
-              </Grid>
-              <Grid sx={{ gridColumn: { xs: "span 12", sm: "span 6" } }}>
-                <TextField
-                  label="Ingreso Mensual"
-                  name="monthlyIncome"
-                  value={form.monthlyIncome}
-                  onChange={handleChange}
-                  fullWidth
-                  required
-                  type="number"
-                  InputLabelProps={{ style: { color: darkGray } }}
-                  InputProps={{ style: { color: darkGray } }}
-                />
-              </Grid>
+          <Box component="form" id="user-add-form" onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+              {[
+                ["name", "Nombre"],
+                ["username", "Usuario"],
+                ["dpi", "DPI"],
+                ["address", "Dirección"],
+                ["cellphone", "Teléfono"],
+                ["email", "Email", "email"],
+                ["password", "Contraseña", "password"],
+                ["jobName", "Puesto"],
+                ["monthlyIncome", "Ingreso Mensual", "number"],
+              ].map(([name, label, type = "text"]) => (
+                <Grid key={name} item xs={12} sm={6}>
+                  <TextField
+                    label={label}
+                    name={name}
+                    type={type}
+                    value={form[name]}
+                    onChange={handleChange}
+                    fullWidth
+                    required
+                    InputLabelProps={{
+                      sx: {
+                        color: "#364159",
+                        fontWeight: "600",
+                        letterSpacing: "0.05em",
+                      },
+                    }}
+                    InputProps={{
+                      sx: {
+                        color: "#99acff",
+                        fontWeight: "500",
+                        backgroundColor: "rgba(153,172,255,0.15)",
+                        borderRadius: 1,
+                      },
+                    }}
+                  />
+                </Grid>
+              ))}
             </Grid>
+
             {error && Array.isArray(error) ? (
               <Alert severity="error" sx={{ mt: 2 }}>
                 <ul style={{ margin: 0, paddingLeft: 18 }}>
@@ -223,16 +182,26 @@ export const UserAdd = ({ onUserCreated }) => {
                 Usuario creado exitosamente
               </Alert>
             )}
-          </form>
+          </Box>
         </DialogContent>
-        <DialogActions>
+
+        <DialogActions sx={{ justifyContent: "center", gap: 2, pb: 3 }}>
           <Button
             onClick={handleClose}
             disabled={loading}
             sx={{
-              backgroundColor: darkGray,
+              background: "linear-gradient(145deg, #364159, #99acff)",
               color: "#fff",
-              "&:hover": { backgroundColor: "#222" },
+              fontWeight: "bold",
+              px: 4,
+              py: 1.3,
+              borderRadius: 2,
+              boxShadow: "0 4px 12px rgba(153,172,255,0.5)",
+              transition: "all 0.3s ease",
+              "&:hover": {
+                background: "linear-gradient(145deg, #99acff, #364159)",
+                boxShadow: "0 6px 16px rgba(153,172,255,0.8)",
+              },
             }}
           >
             Cancelar
@@ -243,9 +212,17 @@ export const UserAdd = ({ onUserCreated }) => {
             variant="contained"
             disabled={loading}
             sx={{
-              backgroundColor: darkGray,
+              background: "linear-gradient(145deg, #364159, #99acff)",
               color: "#fff",
-              "&:hover": { backgroundColor: "#222" },
+              fontWeight: "bold",
+              px: 4,
+              py: 1.3,
+              borderRadius: 2,
+              transition: "all 0.3s ease",
+              "&:hover": {
+
+                transform: "translateY(-2px)",
+              },
             }}
           >
             Crear
