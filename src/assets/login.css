@@ -1,0 +1,44 @@
+body {
+  background-color: #0d1b2a; /* azul oscuro completo */
+}
+
+.section-form {
+  background: rgba(255, 255, 255, 0.1) !important; /* fondo tipo vidrio */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5) !important;
+  border-radius: 16px;
+  animation: fadeInUp 0.7s ease-out;
+  transition: all 0.3s ease-in-out;
+}
+
+.section-title {
+  color: #f0f0f0;
+}
+
+.section-input input {
+  color: white;
+}
+.section-input label {
+  color: #ccc;
+}
+
+.section-button {
+  background-color: #1f6feb;
+  color: white;
+  transition: background 0.3s ease;
+}
+.section-button:hover {
+  background-color: #388bfd !important;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
