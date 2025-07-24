@@ -44,7 +44,10 @@ const MakeWithdrawalForm = () => {
           value={accountNumber}
           onChange={(e) => setAccountNumber(e.target.value)}
           required
-          inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+          inputProps={{ 
+            inputMode: "text",
+            style: { fontSize: "1.1rem" }
+          }}
           fullWidth
         />
 
