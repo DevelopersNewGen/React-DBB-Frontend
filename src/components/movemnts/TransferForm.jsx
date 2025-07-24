@@ -6,17 +6,22 @@ import {
   TextField,
   Button,
   CircularProgress,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
 } from "@mui/material";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 
-const MakeTransferForm = ({ onSubmit, loading }) => {
+const MakeTransferForm = ({ onSubmit, loading, userAccounts = [] }) => {
   const [form, setForm] = useState({
-    accountNumber: "",
+    originAccount: "",
+    destinationAccount: "",
     amount: "",
     description: "",
   });
 
-  const isFormValid = form.accountNumber && parseFloat(form.amount) > 0;
+  const isFormValid = form.originAccount && form.destinationAccount && parseFloat(form.amount) > 0;
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -26,7 +31,7 @@ const MakeTransferForm = ({ onSubmit, loading }) => {
     e.preventDefault();
     if (isFormValid && onSubmit) {
       onSubmit(form);
-      setForm({ accountNumber: "", amount: "", description: "" });
+      setForm({ originAccount: "", destinationAccount: "", amount: "", description: "" });
     }
   };
 
@@ -70,10 +75,25 @@ const MakeTransferForm = ({ onSubmit, loading }) => {
       </Box>
 
       <Box component="form" onSubmit={handleSubmit} noValidate>
+        <FormControl fullWidth margin="normal" required>
+          <InputLabel>Cuenta de origen</InputLabel>
+          <Select
+            name="originAccount"
+            value={form.originAccount}
+            onChange={handleChange}
+            label="Cuenta de origen"
+          >
+            {userAccounts.map((account) => (
+              <MenuItem key={account._id} value={account.accountNumber}>
+                {account.accountNumber} - {account.accountType} (${account.balance?.toFixed(2) || '0.00'})
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <TextField
           label="Cuenta de destino"
-          name="accountNumber"
-          value={form.accountNumber}
+          name="destinationAccount"
+          value={form.destinationAccount}
           onChange={handleChange}
           fullWidth
           margin="normal"
