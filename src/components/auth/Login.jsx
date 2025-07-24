@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, TextField, Typography, Paper } from '@mui/material';
 import PropTypes from "prop-types";
 import { useLogin } from "../../shared/hooks"
+import "../../assets/login.css"
 
 export const Login = ({ switchAuthHandler }) => {
   const { login, isLoading } = useLogin();
@@ -73,7 +74,7 @@ export const Login = ({ switchAuthHandler }) => {
         </Typography>
         <form onSubmit={handleLogin}>
           <TextField
-            label="Correo o Username"
+            label="Correo electrónico"
             type="text"
             fullWidth
             required
