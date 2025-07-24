@@ -12,7 +12,7 @@ import {
   Select,
 } from "@mui/material";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
-
+ 
 const MakeTransferForm = ({ onSubmit, loading, userAccounts = [] }) => {
   const [form, setForm] = useState({
     originAccount: "",
@@ -20,13 +20,13 @@ const MakeTransferForm = ({ onSubmit, loading, userAccounts = [] }) => {
     amount: "",
     description: "",
   });
-
+ 
   const isFormValid = form.originAccount && form.destinationAccount && parseFloat(form.amount) > 0;
-
+ 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
-
+ 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isFormValid && onSubmit) {
@@ -34,7 +34,7 @@ const MakeTransferForm = ({ onSubmit, loading, userAccounts = [] }) => {
       setForm({ originAccount: "", destinationAccount: "", amount: "", description: "" });
     }
   };
-
+ 
   return (
     <Paper
       elevation={3}
@@ -73,23 +73,21 @@ const MakeTransferForm = ({ onSubmit, loading, userAccounts = [] }) => {
           Transferencia Bancaria
         </Typography>
       </Box>
-
       <Box component="form" onSubmit={handleSubmit} noValidate>
-        <FormControl fullWidth margin="normal" required>
-          <InputLabel>Cuenta de origen</InputLabel>
-          <Select
-            name="originAccount"
-            value={form.originAccount}
-            onChange={handleChange}
-            label="Cuenta de origen"
-          >
-            {userAccounts.map((account) => (
-              <MenuItem key={account._id} value={account.accountNumber}>
-                {account.accountNumber} - {account.accountType} (${account.balance?.toFixed(2) || '0.00'})
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+      <TextField
+          label="Cuenta de origen"
+          name="originAccount"
+          value={form.originAccount}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+          required
+          inputProps={{
+            inputMode: "numeric",
+            pattern: "[0-9]*",
+            style: { fontSize: "1.1rem" },
+          }}
+        />
         <TextField
           label="Cuenta de destino"
           name="destinationAccount"
@@ -142,5 +140,5 @@ const MakeTransferForm = ({ onSubmit, loading, userAccounts = [] }) => {
     </Paper>
   );
 };
-
+ 
 export default MakeTransferForm;

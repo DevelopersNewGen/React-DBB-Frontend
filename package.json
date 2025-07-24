@@ -8,6 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "deploy": "firebase deploy",
     "tailwind:dev": "tailwindcss -i ./src/styles.css -o ./src/output.css --watch",
     "tailwind:build": "tailwindcss -i ./src/styles.css -o ./src/output.css --minify"
   },
